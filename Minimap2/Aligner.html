@@ -138,7 +138,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/765524d6f6062d8dabb5a749f88069687bad8dea/src/minimap2/aligner.cr#L2" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L2" target="_blank">
         minimap2/aligner.cr
       </a>
     
@@ -162,6 +162,11 @@
     
       <li class="entry-summary">
         <a href="#new%28idxopt%3ALibMinimap2%3A%3AMmIdxoptT%2Cmapopt%3ALibMinimap2%3A%3AMmMapoptT%2Cthreads%3AInt32%2Cpath%3AString%2Coutput%3AString%7CNil%29-class-method" class="signature"><strong>.new</strong>(idxopt : LibMinimap2::MmIdxoptT, mapopt : LibMinimap2::MmMapoptT, threads : Int32, path : String, output : String | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -211,6 +216,11 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#idx_opt%3ALibMinimap2%3A%3AMmIdxoptT-instance-method" class="signature"><strong>#idx_opt</strong> : LibMinimap2::MmIdxoptT</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#map%28seq%3AString%2Ccs%3ABool%3Dfalse%2Cmd%3ABool%3Dfalse%2Cmax_frag_len%3AInt32%7CNil%3Dnil%2Cextra_flags%3AArray%28UInt64%29%7CNil%3Dnil%2Cquery_name%3AString%7CNil%3Dnil%29%3AArray%28Mapping%29-instance-method" class="signature"><strong>#map</strong>(seq : String, cs : Bool = <span class="n">false</span>, md : Bool = <span class="n">false</span>, max_frag_len : Int32 | Nil = <span class="n">nil</span>, extra_flags : Array(UInt64) | Nil = <span class="n">nil</span>, query_name : String | Nil = <span class="n">nil</span>) : Array(Mapping)</a>
         
       </li>
@@ -221,7 +231,17 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#map_opt%3ALibMinimap2%3A%3AMmMapoptT-instance-method" class="signature"><strong>#map_opt</strong> : LibMinimap2::MmMapoptT</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#n_seq%3AUInt32-instance-method" class="signature"><strong>#n_seq</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq%28name%3AString%2Cstart%3AInt32%3D0%2Cstop%3AInt32%3DInt32%3A%3AMAX%29%3AString%7CNil-instance-method" class="signature"><strong>#seq</strong>(name : String, start : Int32 = <span class="n">0</span>, stop : Int32 = <span class="t">Int32</span><span class="t">::</span><span class="t">MAX</span>) : String | Nil</a>
         
       </li>
     
@@ -280,7 +300,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/765524d6f6062d8dabb5a749f88069687bad8dea/src/minimap2/aligner.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L27" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(path:String,preset:String|Nil=nil,threads:Int32=1,output:String|Nil=nil)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -308,7 +344,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/765524d6f6062d8dabb5a749f88069687bad8dea/src/minimap2/aligner.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -324,7 +360,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/765524d6f6062d8dabb5a749f88069687bad8dea/src/minimap2/aligner.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L103" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -354,7 +390,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/765524d6f6062d8dabb5a749f88069687bad8dea/src/minimap2/aligner.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L97" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="idx_opt:LibMinimap2::MmIdxoptT-instance-method">
+      <div class="signature">
+        
+        def <strong>idx_opt</strong> : LibMinimap2::MmIdxoptT
+
+        <a class="method-permalink" href="#idx_opt%3ALibMinimap2%3A%3AMmIdxoptT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -370,7 +422,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/765524d6f6062d8dabb5a749f88069687bad8dea/src/minimap2/aligner.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L76" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -386,7 +438,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/765524d6f6062d8dabb5a749f88069687bad8dea/src/minimap2/aligner.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L80" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="map_opt:LibMinimap2::MmMapoptT-instance-method">
+      <div class="signature">
+        
+        def <strong>map_opt</strong> : LibMinimap2::MmMapoptT
+
+        <a class="method-permalink" href="#map_opt%3ALibMinimap2%3A%3AMmMapoptT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -402,7 +470,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/765524d6f6062d8dabb5a749f88069687bad8dea/src/minimap2/aligner.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L44" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq(name:String,start:Int32=0,stop:Int32=Int32::MAX):String|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>seq</strong>(name : String, start : Int32 = <span class="n">0</span>, stop : Int32 = <span class="t">Int32</span><span class="t">::</span><span class="t">MAX</span>) : String | Nil
+
+        <a class="method-permalink" href="#seq%28name%3AString%2Cstart%3AInt32%3D0%2Cstop%3AInt32%3DInt32%3A%3AMAX%29%3AString%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
