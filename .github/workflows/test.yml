@@ -23,6 +23,7 @@ jobs:
             curl \
             pkg-config \
             zlib1g-dev
+          ext/build.sh
 
       - name: Install shards
         run: shards install
