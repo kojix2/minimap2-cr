@@ -25,7 +25,7 @@ describe Minimap2 do
   end
 
   it "builds an index and maps a sequence" do
-    ref_path = File.expand_path("../../minimap2-rs/test_data/test_data.fasta", __DIR__)
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
     aligner = Minimap2::Aligner.builder.map_ont.with_cigar.with_index(ref_path)
 
     seq = load_fasta_sequence(ref_path, 100)
@@ -39,7 +39,7 @@ describe Minimap2 do
   end
 
   it "emits cs and md when requested" do
-    ref_path = File.expand_path("../../minimap2-rs/test_data/test_data.fasta", __DIR__)
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
     aligner = Minimap2::Aligner.builder.map_ont.with_cigar.with_index(ref_path)
 
     seq = load_fasta_sequence(ref_path, 120)
@@ -52,7 +52,7 @@ describe Minimap2 do
   end
 
   it "reports sequence count" do
-    ref_path = File.expand_path("../../minimap2-rs/test_data/test_data.fasta", __DIR__)
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
     aligner = Minimap2::Aligner.builder.map_ont.with_index(ref_path)
     aligner.n_seq.should be > 0_u32
   end
