@@ -1,5 +1,5 @@
 module Minimap2
-  MM_F_CIGAR = 0x004_i64
+  MM_F_CIGAR  = 0x004_i64
   MM_F_OUT_CS = 0x040_i64
 
   @[Link(ldflags: "-Wl,-rpath,#{__DIR__}/../../ext -L#{__DIR__}/../../ext -lminimap2 -lm -lz -lpthread")]

@@ -1,5 +1,18 @@
 module Minimap2
   class AlignerBuilder
+    PRESETS = {
+      map_ont:   "map-ont",
+      map_hifi:  "map-hifi",
+      map_pb:    "map-pb",
+      splice:    "splice",
+      splice_hq: "splice:hq",
+      splice_sr: "splice:sr",
+      asm5:      "asm5",
+      asm10:     "asm10",
+      asm20:     "asm20",
+      sr:        "sr",
+    }
+
     @idxopt : LibMinimap2::MmIdxoptT
     @mapopt : LibMinimap2::MmMapoptT
     @threads : Int32
@@ -18,45 +31,11 @@ module Minimap2
       self
     end
 
-    def map_ont : self
-      preset("map-ont")
-    end
-
-    def map_hifi : self
-      preset("map-hifi")
-    end
-
-    def map_pb : self
-      preset("map-pb")
-    end
-
-    def splice : self
-      preset("splice")
-    end
-
-    def splice_hq : self
-      preset("splice:hq")
-    end
-
-    def splice_sr : self
-      preset("splice:sr")
-    end
-
-    def asm5 : self
-      preset("asm5")
-    end
-
-    def asm10 : self
-      preset("asm10")
-    end
-
-    def asm20 : self
-      preset("asm20")
-    end
-
-    def sr : self
-      preset("sr")
-    end
+    {% for name, value in PRESETS %}
+      def {{name.id}} : self
+        preset({{value}})
+      end
+    {% end %}
 
     def with_cigar : self
       @mapopt.flag |= MM_F_CIGAR | MM_F_OUT_CS

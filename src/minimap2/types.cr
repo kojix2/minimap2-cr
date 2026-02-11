@@ -48,7 +48,7 @@ module Minimap2
       @cigar : Array(Tuple(UInt32, UInt8)),
       @nm : Int32,
       @md : String?,
-      @cs : String?
+      @cs : String?,
     )
     end
   end

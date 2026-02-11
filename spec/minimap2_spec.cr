@@ -15,7 +15,6 @@ def load_fasta_sequence(path : String, max_len : Int32 = 200) : String
 end
 
 describe Minimap2 do
-
   it "initializes options" do
     idxopt = Minimap2::LibMinimap2::MmIdxoptT.new
     mapopt = Minimap2::LibMinimap2::MmMapoptT.new
