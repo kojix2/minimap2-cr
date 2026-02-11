@@ -1,0 +1,12 @@
+/docs/
+/lib/
+/bin/
+/.shards/
+*.dwarf
+/ext/minimap2/
+/ext/libminimap2.a
+/ext/libminimap2.so
+
+# Libraries don't need dependency lock
+# Dependencies will be locked in applications that use them
+/shard.lock

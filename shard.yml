@@ -1,0 +1,12 @@
+name: minimap2
+version: 0.1.0
+
+authors:
+  - kojix2 <2xijok@gmail.com>
+
+crystal: '>= 1.19.1'
+
+license: MIT
+
+scripts:
+  postinstall: "bash ext/build.sh"
