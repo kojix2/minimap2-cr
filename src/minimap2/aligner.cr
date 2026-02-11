@@ -151,6 +151,7 @@ module Minimap2
           strand = rev ? Strand::Reverse : Strand::Forward
 
           cigar = [] of Tuple(UInt32, UInt8)
+          cigar_str = ""
           nm = 0
           md_str : String? = nil
           cs_str : String? = nil
@@ -162,6 +163,7 @@ module Minimap2
             nm = reg.blen - reg.mlen + n_ambi
 
             cigar = parse_cigar(extra_ptr)
+            cigar_str = build_cigar_string(cigar)
 
             if cs
               cs_str = gen_cs(km, idx, regs + i, seq)
@@ -186,6 +188,7 @@ module Minimap2
             mapq,
             is_primary,
             cigar,
+            cigar_str,
             nm,
             md_str,
             cs_str
@@ -201,6 +204,16 @@ module Minimap2
     private def gen_md(km : Void*, idx : Pointer(LibMinimap2::MmIdxT), reg_ptr : Pointer(LibMinimap2::MmReg1T), seq : Bytes) : String
       generate_string(km, idx, reg_ptr, seq) do |km, buf, max_len, idx, reg_ptr, seq|
         LibMinimap2.mm_gen_MD(km, buf, max_len, idx, reg_ptr, seq)
+      end
+    end
+
+    private def build_cigar_string(cigar : Array(Tuple(UInt32, UInt8))) : String
+      return "" if cigar.empty?
+
+      String.build do |io|
+        cigar.each do |(len, op)|
+          io << len << self.class.cigar_op_char(op)
+        end
       end
     end
 

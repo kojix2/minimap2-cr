@@ -29,6 +29,7 @@ module Minimap2
     getter mapq : UInt32
     getter is_primary : Bool
     getter cigar : Array(Tuple(UInt32, UInt8))
+    getter cigar_str : String
     getter nm : Int32
     getter md : String?
     getter cs : String?
@@ -46,6 +47,7 @@ module Minimap2
       @mapq : UInt32,
       @is_primary : Bool,
       @cigar : Array(Tuple(UInt32, UInt8)),
+      @cigar_str : String,
       @nm : Int32,
       @md : String?,
       @cs : String?,
