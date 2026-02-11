@@ -150,7 +150,20 @@ module Minimap2
     fun mm_idx_reader_close(r : MmIdxReaderT*) : Void
     fun mm_idx_reader_eof(r : MmIdxReaderT*) : Int32
     fun mm_idx_is_idx(fn : LibC::Char*) : Int64
+    fun mm_idx_load(fp : Void*) : MmIdxT*
+    fun mm_idx_dump(fp : Void*, mi : MmIdxT*) : Void
+    fun mm_idx_str(w : Int32, k : Int32, is_hpc : Int32, bucket_bits : Int32, n : Int32, seq : LibC::Char**, name : LibC::Char**) : MmIdxT*
+    fun mm_idx_stat(idx : MmIdxT*) : Void
     fun mm_idx_index_name(mi : MmIdxT*) : Int32
+    fun mm_idx_name2id(mi : MmIdxT*, name : LibC::Char*) : Int32
+    fun mm_idx_getseq(mi : MmIdxT*, rid : UInt32, st : UInt32, en : UInt32, seq : UInt8*) : Int32
+    fun mm_idx_alt_read(mi : MmIdxT*, fn : LibC::Char*) : Int32
+    fun mm_idx_bed_read(mi : MmIdxT*, fn : LibC::Char*, read_junc : Int32) : Int32
+    fun mm_idx_bed_junc(mi : MmIdxT*, ctg : Int32, st : Int32, en : Int32, s : UInt8*) : Int32
+    fun mm_max_spsc_bonus(mo : MmMapoptT*) : Int32
+    fun mm_idx_spsc_read(idx : MmIdxT*, fn : LibC::Char*, max_sc : Int32) : Int32
+    fun mm_idx_spsc_read2(idx : MmIdxT*, fn : LibC::Char*, max_sc : Int32, scale : Float32) : Int32
+    fun mm_idx_spsc_get(db : MmIdxT*, cid : Int32, st0 : Int64, en0 : Int64, rev : Int32, sc : UInt8*) : Int64
 
     fun mm_idx_destroy(mi : MmIdxT*) : Void
 
@@ -159,7 +172,12 @@ module Minimap2
     fun mm_tbuf_get_km(b : MmTbufT*) : Void*
 
     fun mm_map(mi : MmIdxT*, l_seq : Int32, seq : LibC::Char*, n_regs : Int32*, b : MmTbufT*, opt : MmMapoptT*, name : LibC::Char*) : MmReg1T*
+    fun mm_map_frag(mi : MmIdxT*, n_segs : Int32, qlens : Int32*, seqs : LibC::Char**, n_regs : Int32*, regs : MmReg1T**, b : MmTbufT*, opt : MmMapoptT*, qname : LibC::Char*) : Void
+    fun mm_map_file(idx : MmIdxT*, fn : LibC::Char*, opt : MmMapoptT*, n_threads : Int32) : Int32
+    fun mm_map_file_frag(idx : MmIdxT*, n_segs : Int32, fn : LibC::Char**, opt : MmMapoptT*, n_threads : Int32) : Int32
     fun mm_gen_cs(km : Void*, buf : LibC::Char**, max_len : Int32*, mi : MmIdxT*, r : MmReg1T*, seq : LibC::Char*, no_iden : Int32) : Int32
     fun mm_gen_MD(km : Void*, buf : LibC::Char**, max_len : Int32*, mi : MmIdxT*, r : MmReg1T*, seq : LibC::Char*) : Int32
+
+    fun mm_idx_build(fn : LibC::Char*, w : Int32, k : Int32, flag : Int32, n_threads : Int32) : MmIdxT*
   end
 end

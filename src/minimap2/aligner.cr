@@ -1,5 +1,8 @@
 module Minimap2
   class Aligner
+    getter idx_opt : LibMinimap2::MmIdxoptT
+    getter map_opt : LibMinimap2::MmMapoptT
+
     @idxopt : LibMinimap2::MmIdxoptT
     @mapopt : LibMinimap2::MmMapoptT
     @threads : Int32
@@ -7,6 +10,13 @@ module Minimap2
 
     def self.builder : AlignerBuilder
       AlignerBuilder.new
+    end
+
+    def self.new(path : String, preset : String? = nil, threads : Int32 = 1, output : String? = nil)
+      builder = AlignerBuilder.new
+      builder.preset(preset) if preset
+      builder.with_index_threads(threads)
+      builder.with_index(path, output)
     end
 
     def initialize(idxopt : LibMinimap2::MmIdxoptT, mapopt : LibMinimap2::MmMapoptT, threads : Int32, path : String, output : String?)
@@ -29,6 +39,33 @@ module Minimap2
     def n_seq : UInt32
       return 0_u32 if @idx_parts.empty?
       @idx_parts[0].value.n_seq
+    end
+
+    def seq(name : String, start : Int32 = 0, stop : Int32 = Int32::MAX) : String?
+      return nil if @idx_parts.empty?
+
+      @idx_parts.each do |idx|
+        next if idx.null?
+        next if (@mapopt.flag & 4_i64) == 0_i64 && (idx.value.flag & 2) == 0
+
+        rid = LibMinimap2.mm_idx_name2id(idx, name)
+        next if rid < 0
+
+        seq_entry = idx.value.seq + rid
+        seq_len = seq_entry.value.len.to_i
+        return nil if start >= seq_len || start >= stop
+
+        en = stop
+        en = seq_len if en < 0 || en > seq_len
+
+        buf = Bytes.new(en - start)
+        got = LibMinimap2.mm_idx_getseq(idx, rid.to_u32, start.to_u32, en.to_u32, buf.to_unsafe)
+        next if got <= 0
+
+        return decode_seq(buf, got)
+      end
+
+      nil
     end
 
     def map(seq : String, cs : Bool = false, md : Bool = false, max_frag_len : Int32? = nil, extra_flags : Array(UInt64)? = nil, query_name : String? = nil) : Array(Mapping)
@@ -213,6 +250,15 @@ module Minimap2
       String.build do |io|
         cigar.each do |(len, op)|
           io << len << self.class.cigar_op_char(op)
+        end
+      end
+    end
+
+    private def decode_seq(buf : Bytes, len : Int32) : String
+      bases = "ACGTN"
+      String.build do |io|
+        len.times do |i|
+          io << bases[buf[i].to_i]
         end
       end
     end
