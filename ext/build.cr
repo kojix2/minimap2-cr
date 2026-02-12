@@ -15,7 +15,7 @@ LIB_A_DST = File.join(EXT_DIR, "libminimap2.a")
 
 {% if flag?(:darwin) %}
   OUT_LIB = File.join(EXT_DIR, "libminimap2.dylib")
-{% elsif flag?(:windows) %}
+{% elsif flag?(:win32) %}
   OUT_LIB = ""
 {% else %}
   OUT_LIB = File.join(EXT_DIR, "libminimap2.so")
@@ -59,12 +59,14 @@ private def build_static
     make_args << "aarch64=1"
   {% end %}
 
-  run!("make", make_args)
+  make_cmd = ENV["MAKE"]?.presence || "make"
+
+  run!(make_cmd, make_args)
   FileUtils.cp(LIB_A_SRC, LIB_A_DST)
 end
 
 private def build_shared
-  {% if flag?(:windows) %}
+  {% if flag?(:win32) %}
     # On Windows, prefer static linking (ext/libminimap2.a).
     puts "Windows: static lib installed at #{LIB_A_DST}"
   {% elsif flag?(:darwin) %}

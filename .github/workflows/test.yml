@@ -54,6 +54,8 @@ jobs:
       - name: Build minimap2 (Windows/MSYS2)
         if: runner.os == 'Windows'
         shell: msys2 {0}
+        env:
+          MAKE: mingw32-make
         run: crystal run ext/build.cr
 
       - name: Install shards
