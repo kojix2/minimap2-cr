@@ -1,4 +1,4 @@
-# minimap2
+# minimap2-cr
 
 Crystal bindings for [minimap2](https://github.com/lh3/minimap2) (long-read mapper).
 
