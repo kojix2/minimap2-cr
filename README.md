@@ -1,5 +1,7 @@
 # minimap2-cr
 
+[![CI](https://github.com/kojix2/minimap2-cr/actions/workflows/test.yml/badge.svg)](https://github.com/kojix2/minimap2-cr/actions/workflows/test.yml)
+
 Crystal bindings for [minimap2](https://github.com/lh3/minimap2) (long-read mapper).
 
 This shard downloads/builds minimap2 during install (see `shard.yml` `postinstall`).
