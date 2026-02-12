@@ -65,7 +65,7 @@ puts Minimap2.revcomp("ACGTN")
 
 ## Development
 
-- Build vendored minimap2: `shards install` (runs `ext/build.sh` via postinstall)
+- Build vendored minimap2: `shards install` (runs `ext/build.cr` via postinstall)
 - Run tests: `crystal spec`
 
 If you see runtime linker errors, try:

@@ -2,7 +2,11 @@ module Minimap2
   MM_F_CIGAR  = 0x004_i64
   MM_F_OUT_CS = 0x040_i64
 
-  @[Link(ldflags: "-Wl,-rpath,#{__DIR__}/../../ext -L#{__DIR__}/../../ext -lminimap2 -lm -lz -lpthread")]
+  {% if flag?(:windows) %}
+    @[Link(ldflags: "-L#{__DIR__}/../../ext -lminimap2 -lz")]
+  {% else %}
+    @[Link(ldflags: "-Wl,-rpath,#{__DIR__}/../../ext -L#{__DIR__}/../../ext -lminimap2 -lm -lz -lpthread")]
+  {% end %}
   lib LibMinimap2
     type MmIdxReaderT = Void
     type MmTbufT = Void

@@ -9,4 +9,4 @@ crystal: '>= 1.19.1'
 license: MIT
 
 scripts:
-  postinstall: "bash ext/build.sh"
+  postinstall: "crystal run ext/build.cr --release"

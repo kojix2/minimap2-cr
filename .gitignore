@@ -6,6 +6,8 @@
 /ext/minimap2/
 /ext/libminimap2.a
 /ext/libminimap2.so
+/ext/libminimap2.dylib
+/ext/libminimap2.dll
 
 # Libraries don't need dependency lock
 # Dependencies will be locked in applications that use them
