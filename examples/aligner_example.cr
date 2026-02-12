@@ -2,7 +2,7 @@ require "../src/minimap2"
 
 # load or build index
 ref_path = "#{__DIR__}/../ext/minimap2/test/MT-human.fa"
-aligner = Minimap2::Aligner.builder.with_cigar.with_index(ref_path)
+aligner = Minimap2::Aligner.build.with_cigar.with_index(ref_path)
 
 # read a subsequence from the reference
 # positions are 0-based, end is exclusive

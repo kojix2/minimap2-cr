@@ -8,14 +8,29 @@ module Minimap2
     @threads : Int32
     @idx_parts : Array(Pointer(LibMinimap2::MmIdxT))
 
-    def self.builder : AlignerBuilder
+    def self.build : AlignerBuilder
       AlignerBuilder.new
     end
 
-    def self.new(path : String, preset : String? = nil, threads : Int32 = 1, output : String? = nil)
+    @[Deprecated("Use .build instead")]
+    def self.builder : AlignerBuilder
+      build
+    end
+
+    def self.new(path : String, preset : String? = nil, threads : Int32 = 1, output : String? = nil, cigar : Bool = false)
       builder = AlignerBuilder.new
       builder.preset(preset) if preset
       builder.with_index_threads(threads)
+      builder.with_cigar if cigar
+      builder.with_index(path, output)
+    end
+
+    def self.new(path : String, preset : String? = nil, threads : Int32 = 1, output : String? = nil, cigar : Bool = false, &block : AlignerBuilder ->)
+      builder = AlignerBuilder.new
+      builder.preset(preset) if preset
+      builder.with_index_threads(threads)
+      builder.with_cigar if cigar
+      block.call(builder)
       builder.with_index(path, output)
     end
 

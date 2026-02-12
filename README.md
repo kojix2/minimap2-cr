@@ -32,7 +32,7 @@ sudo apt-get install -y build-essential curl bzip2 zlib1g-dev
 ```crystal
 require "minimap2"
 
-aligner = Minimap2::Aligner.builder
+aligner = Minimap2::Aligner.build
   .map_ont
   .with_cigar
   .with_index("reference.fasta")
@@ -50,12 +50,24 @@ require "minimap2"
 
 ref_path = "#{__DIR__}/ext/minimap2/test/MT-human.fa"
 
-aligner = Minimap2::Aligner.new(ref_path)
+aligner = Minimap2::Aligner.new(ref_path, cigar: true)
 seq     = aligner.seq("MT_human", 100, 200)
 raise "seq not found" unless seq
 
 hits = aligner.map(seq, cs: true, md: true)
 pp hits
+```
+
+### Block-style `new`
+
+`new` can take keyword options and a block; keyword options are applied first.
+
+```crystal
+require "minimap2"
+
+aligner = Minimap2::Aligner.new("reference.fasta", preset: "map-ont", cigar: true) do |b|
+  b.with_index_threads(4)
+end
 ```
 
 ### Utilities
