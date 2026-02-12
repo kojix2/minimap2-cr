@@ -2,8 +2,10 @@ module Minimap2
   MM_F_CIGAR  = 0x004_i64
   MM_F_OUT_CS = 0x040_i64
 
-  {% if flag?(:windows) %}
-    @[Link(ldflags: "-L#{__DIR__}/../../ext -lminimap2 -lz")]
+  {% if flag?(:msvc) %}
+    {% raise "minimap2-cr: MSVC toolchain is not supported. Use MinGW/MSYS2 (win32+gnu)." %}
+  {% elsif flag?(:win32) && flag?(:gnu) %}
+    @[Link(ldflags: "-L#{__DIR__}/../../ext -lminimap2 -lz -lwinpthread")]
   {% else %}
     @[Link(ldflags: "-Wl,-rpath,#{__DIR__}/../../ext -L#{__DIR__}/../../ext -lminimap2 -lm -lz -lpthread")]
   {% end %}
