@@ -38,6 +38,7 @@ jobs:
           update: true
           install: >-
             mingw-w64-x86_64-crystal
+            mingw-w64-x86_64-shards
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-make
             mingw-w64-x86_64-zlib
