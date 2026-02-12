@@ -27,45 +27,28 @@ sudo apt-get install -y build-essential curl bzip2 zlib1g-dev
 
 ## Usage
 
-### Basic mapping
+### `new` (shortcut)
+
+`new` accepts keyword options for common settings.
 
 ```crystal
 require "minimap2"
 
-aligner = Minimap2::Aligner.build
-  .map_ont
-  .with_cigar
-  .with_index("reference.fasta")
-
+aligner = Minimap2::Aligner.new("reference.fasta", preset: "map-ont", cigar: true, threads: 4)
 hits = aligner.map("ACGTACGTACGT")
 puts hits.size
 ```
 
-### Ruby-minimap2-like quick start
+### `new` with block
 
-This mirrors ruby-minimap2's `Aligner#seq` + mapping flow.
-
-```crystal
-require "minimap2"
-
-ref_path = "#{__DIR__}/ext/minimap2/test/MT-human.fa"
-
-aligner = Minimap2::Aligner.new(ref_path, cigar: true)
-seq     = aligner.seq("MT_human", 100, 200)
-raise "seq not found" unless seq
-
-hits = aligner.map(seq, cs: true, md: true)
-pp hits
-```
-
-### Block-style `new`
-
-`new` can take keyword options and a block; keyword options are applied first.
+`new` applies keyword options first, then yields the builder for extra configuration.
 
 ```crystal
 require "minimap2"
 
-aligner = Minimap2::Aligner.new("reference.fasta", preset: "map-ont", cigar: true) do |b|
+aligner = Minimap2::Aligner.new("reference.fasta") do |b|
+  b.map_ont
+  b.with_cigar
   b.with_index_threads(4)
 end
 ```
