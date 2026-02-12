@@ -3,8 +3,8 @@ module Minimap2
     getter idx_opt : LibMinimap2::MmIdxoptT
     getter map_opt : LibMinimap2::MmMapoptT
 
-    @idxopt : LibMinimap2::MmIdxoptT
-    @mapopt : LibMinimap2::MmMapoptT
+    @idx_opt : LibMinimap2::MmIdxoptT
+    @map_opt : LibMinimap2::MmMapoptT
     @threads : Int32
     @idx_parts : Array(Pointer(LibMinimap2::MmIdxT))
 
@@ -35,8 +35,8 @@ module Minimap2
     end
 
     def initialize(idxopt : LibMinimap2::MmIdxoptT, mapopt : LibMinimap2::MmMapoptT, threads : Int32, path : String, output : String?)
-      @idxopt = idxopt
-      @mapopt = mapopt
+      @idx_opt = idxopt
+      @map_opt = mapopt
       @threads = threads
       @idx_parts = [] of Pointer(LibMinimap2::MmIdxT)
 
@@ -61,7 +61,7 @@ module Minimap2
 
       @idx_parts.each do |idx|
         next if idx.null?
-        next if (@mapopt.flag & 4_i64) == 0_i64 && (idx.value.flag & 2) == 0
+        next if (@map_opt.flag & 4_i64) == 0_i64 && (idx.value.flag & 2) == 0
 
         rid = LibMinimap2.mm_idx_name2id(idx, name)
         next if rid < 0
@@ -138,7 +138,7 @@ module Minimap2
     private def open_index_reader(path : String, output : String?)
       c_path = path.to_unsafe
       c_output = output ? output.to_unsafe : Pointer(LibC::Char).null
-      reader = LibMinimap2.mm_idx_reader_open(c_path, pointerof(@idxopt), c_output)
+      reader = LibMinimap2.mm_idx_reader_open(c_path, pointerof(@idx_opt), c_output)
       raise "Failed to open index or reference" if reader.null?
       reader
     end
@@ -154,11 +154,11 @@ module Minimap2
 
     private def update_mapopt_if_needed
       return if @idx_parts.empty?
-      LibMinimap2.mm_mapopt_update(pointerof(@mapopt), @idx_parts.first)
+      LibMinimap2.mm_mapopt_update(pointerof(@map_opt), @idx_parts.first)
     end
 
     private def prepare_mapopt(max_frag_len : Int32?, extra_flags : Array(UInt64)?)
-      mapopt = @mapopt
+      mapopt = @map_opt
       mapopt.max_frag_len = max_frag_len if max_frag_len
       if extra_flags
         extra_flags.each { |flag| mapopt.flag |= flag.to_i64 }
