@@ -138,7 +138,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L2" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L2" target="_blank">
         minimap2/aligner.cr
       </a>
     
@@ -161,12 +161,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28idxopt%3ALibMinimap2%3A%3AMmIdxoptT%2Cmapopt%3ALibMinimap2%3A%3AMmMapoptT%2Cthreads%3AInt32%2Cpath%3AString%2Coutput%3AString%7CNil%29-class-method" class="signature"><strong>.new</strong>(idxopt : LibMinimap2::MmIdxoptT, mapopt : LibMinimap2::MmMapoptT, threads : Int32, path : String, output : String | Nil)</a>
+        <a href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%2Ccigar%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>, cigar : Bool = <span class="n">false</span>)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>)</a>
+        <a href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%2Ccigar%3ABool%3Dfalse%2C%26block%3AAlignerBuilder-%3E%29-class-method" class="signature"><strong>.new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>, cigar : Bool = <span class="n">false</span>, &block : AlignerBuilder -> )</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28idxopt%3ALibMinimap2%3A%3AMmIdxoptT%2Cmapopt%3ALibMinimap2%3A%3AMmMapoptT%2Cthreads%3AInt32%2Cpath%3AString%2Coutput%3AString%7CNil%29-class-method" class="signature"><strong>.new</strong>(idxopt : LibMinimap2::MmIdxoptT, mapopt : LibMinimap2::MmMapoptT, threads : Int32, path : String, output : String | Nil)</a>
         
       </li>
     
@@ -185,7 +190,14 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#build%3AAlignerBuilder-class-method" class="signature"><strong>.build</strong> : AlignerBuilder</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#builder%3AAlignerBuilder-class-method" class="signature"><strong>.builder</strong> : AlignerBuilder</a>
+        
+          <div class="summary"><p><span class="flag red">DEPRECATED</span>  Use .build instead</p></div>
         
       </li>
     
@@ -289,6 +301,38 @@
     Constructor Detail
   </h2>
   
+    <div class="entry-detail" id="new(path:String,preset:String|Nil=nil,threads:Int32=1,output:String|Nil=nil,cigar:Bool=false)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>, cigar : Bool = <span class="n">false</span>)
+
+        <a class="method-permalink" href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%2Ccigar%3ABool%3Dfalse%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L20" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(path:String,preset:String|Nil=nil,threads:Int32=1,output:String|Nil=nil,cigar:Bool=false,&amp;block:AlignerBuilder-&gt;)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>, cigar : Bool = <span class="n">false</span>, &block : <a href="../Minimap2/AlignerBuilder.html">AlignerBuilder</a> -> )
+
+        <a class="method-permalink" href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%2Ccigar%3ABool%3Dfalse%2C%26block%3AAlignerBuilder-%3E%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L28" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="new(idxopt:LibMinimap2::MmIdxoptT,mapopt:LibMinimap2::MmMapoptT,threads:Int32,path:String,output:String|Nil)-class-method">
       <div class="signature">
         
@@ -300,23 +344,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L27" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="new(path:String,preset:String|Nil=nil,threads:Int32=1,output:String|Nil=nil)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>)
-
-        <a class="method-permalink" href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -333,6 +361,22 @@
     Class Method Detail
   </h2>
   
+    <div class="entry-detail" id="build:AlignerBuilder-class-method">
+      <div class="signature">
+        
+        def self.<strong>build</strong> : <a href="../Minimap2/AlignerBuilder.html">AlignerBuilder</a>
+
+        <a class="method-permalink" href="#build%3AAlignerBuilder-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L11" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="builder:AlignerBuilder-class-method">
       <div class="signature">
         
@@ -341,10 +385,15 @@
         <a class="method-permalink" href="#builder%3AAlignerBuilder-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p><span class="flag red">DEPRECATED</span>  Use .build instead</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -360,7 +409,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L103" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L113" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -390,7 +439,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L97" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L107" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -406,7 +455,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L3" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -422,7 +471,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L76" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -438,7 +487,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L80" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -454,7 +503,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -470,7 +519,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -486,7 +535,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L59" target="_blank">View source</a>]
         
       </div>
     </div>

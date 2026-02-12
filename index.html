@@ -99,11 +99,12 @@
 
 
 <div class="main-content">
-<h1><a id="minimap2" class="anchor" href="#minimap2">  <svg class="octicon-link" aria-hidden="true">
+<h1><a id="minimap2-cr" class="anchor" href="#minimap2-cr">  <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>minimap2</h1>
-<p><span class="flag orange">TODO</span>  Write a description here</p>
+</a>minimap2-cr</h1>
+<p>Crystal bindings for <a href="https://github.com/lh3/minimap2">minimap2</a> (long-read mapper).</p>
+<p>This shard downloads/builds minimap2 during install (see <code>shard.yml</code> <code>postinstall</code>).</p>
 <h2><a id="installation" class="anchor" href="#installation">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -114,32 +115,85 @@
 <p>Add the dependency to your <code>shard.yml</code>:</p>
 <pre><code class="language-yaml">dependencies:
   minimap2:
-    github: your-github-user/minimap2</code></pre>
+    github: kojix2/minimap2-cr</code></pre>
 </li>
 <li>
 <p>Run <code>shards install</code></p>
 </li>
 </ol>
+<h3><a id="system-requirements-linux" class="anchor" href="#system-requirements-linux">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>System requirements (Linux)</h3>
+<p>Building minimap2 requires a C toolchain and zlib headers.</p>
+<pre><code class="language-sh">sudo apt-get update
+sudo apt-get install -y build-essential curl bzip2 zlib1g-dev</code></pre>
 <h2><a id="usage" class="anchor" href="#usage">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Usage</h2>
+<h3><a id="basic-mapping" class="anchor" href="#basic-mapping">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Basic mapping</h3>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
 
-aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.builder
+aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.build
   .map_ont
   .with_cigar
   .with_index(<span class="s">&quot;reference.fasta&quot;</span>)
 
 hits <span class="o">=</span> aligner.map(<span class="s">&quot;ACGTACGTACGT&quot;</span>)
 puts hits.size</code></pre>
+<h3><a id="ruby-minimap2-like-quick-start" class="anchor" href="#ruby-minimap2-like-quick-start">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Ruby-minimap2-like quick start</h3>
+<p>This mirrors ruby-minimap2's <code>Aligner#seq</code> + mapping flow.</p>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
+
+ref_path <span class="o">=</span> <span class="s">&quot;</span><span class="i">#{</span>__DIR__<span class="i">}</span><span class="s">/ext/minimap2/test/MT-human.fa&quot;</span>
+
+aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(ref_path, cigar: <span class="n">true</span>)
+seq     <span class="o">=</span> aligner.seq(<span class="s">&quot;MT_human&quot;</span>, <span class="n">100</span>, <span class="n">200</span>)
+raise <span class="s">&quot;seq not found&quot;</span> <span class="k">unless</span> seq
+
+hits <span class="o">=</span> aligner.map(seq, cs: <span class="n">true</span>, md: <span class="n">true</span>)
+pp hits</code></pre>
+<h3><a id="block-style-new" class="anchor" href="#block-style-new">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Block-style <code>new</code></h3>
+<p><code>new</code> can take keyword options and a block; keyword options are applied first.</p>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
+
+aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(<span class="s">&quot;reference.fasta&quot;</span>, preset: <span class="s">&quot;map-ont&quot;</span>, cigar: <span class="n">true</span>) <span class="k">do</span> <span class="o">|</span>b<span class="o">|</span>
+  b.with_index_threads(<span class="n">4</span>)
+<span class="k">end</span></code></pre>
+<h3><a id="utilities" class="anchor" href="#utilities">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Utilities</h3>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
+
+puts <span class="t">Minimap2</span>.revcomp(<span class="s">&quot;ACGTN&quot;</span>)</code></pre>
 <h2><a id="development" class="anchor" href="#development">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Development</h2>
-<p><span class="flag orange">TODO</span>  Write development instructions here</p>
+<ul>
+<li>Build vendored minimap2: <code>shards install</code> (runs <code>ext/build.sh</code> via postinstall)</li>
+<li>Run tests: <code>crystal spec</code></li>
+</ul>
+<p>If you see runtime linker errors, try:</p>
+<pre><code class="language-sh">export LD_LIBRARY_PATH=&quot;$PWD/ext&quot;</code></pre>
 <h2><a id="contributing" class="anchor" href="#contributing">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>

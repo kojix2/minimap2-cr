@@ -136,49 +136,42 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2.cr#L8" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2.cr#L7" target="_blank">
         minimap2.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/aligner.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/aligner.cr#L1" target="_blank">
         minimap2/aligner.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/builder.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/builder.cr#L1" target="_blank">
         minimap2/builder.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/execute.cr#L1" target="_blank">
-        minimap2/execute.cr
-      </a>
-    
-    <br/>
-  
-    
-      <a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/ffi.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/ffi.cr#L1" target="_blank">
         minimap2/ffi.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/mappy.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/mappy.cr#L1" target="_blank">
         minimap2/mappy.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/types.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/types.cr#L1" target="_blank">
         minimap2/types.cr
       </a>
     
@@ -232,18 +225,6 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#execute%28args%3AArray%28String%29%29%3AInt32-class-method" class="signature"><strong>.execute</strong>(args : Array(String)) : Int32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#execute%28%2Aargs%3AString%29%3AInt32-class-method" class="signature"><strong>.execute</strong>(*args : String) : Int32</a>
-        
-          <div class="summary"><p>Execute minimap2 command with given options by directly calling the native <code>main(argc, argv)</code>.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#fetch_seq%28idx%3APointer%28LibMinimap2%3A%3AMmIdxT%29%2Cname%3AString%2Cstart%3AInt32%3D0%2Cstop%3AInt32%3DInt32%3A%3AMAX%29%3AString%7CNil-class-method" class="signature"><strong>.fetch_seq</strong>(idx : Pointer(LibMinimap2::MmIdxT), name : String, start : Int32 = <span class="n">0</span>, stop : Int32 = <span class="t">Int32</span><span class="t">::</span><span class="t">MAX</span>) : String | Nil</a>
         
       </li>
@@ -287,47 +268,6 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="execute(args:Array(String)):Int32-class-method">
-      <div class="signature">
-        
-        def self.<strong>execute</strong>(args : Array(String)) : Int32
-
-        <a class="method-permalink" href="#execute%28args%3AArray%28String%29%29%3AInt32-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/execute.cr#L21" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="execute(*args:String):Int32-class-method">
-      <div class="signature">
-        
-        def self.<strong>execute</strong>(*args : String) : Int32
-
-        <a class="method-permalink" href="#execute%28%2Aargs%3AString%29%3AInt32-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Execute minimap2 command with given options by directly calling the native <code>main(argc, argv)</code>.</p>
-<p>This does not spawn a subprocess.</p>
-<p>Example:
-Minimap2.execute(&quot;--version&quot;)
-Minimap2.execute(&quot;-x map-ont&quot;, &quot;ref.fa&quot;, &quot;reads.fq&quot;)</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/execute.cr#L9" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="fetch_seq(idx:Pointer(LibMinimap2::MmIdxT),name:String,start:Int32=0,stop:Int32=Int32::MAX):String|Nil-class-method">
       <div class="signature">
         
@@ -339,7 +279,7 @@ Minimap2.execute(&quot;-x map-ont&quot;, &quot;ref.fa&quot;, &quot;reads.fq&quot
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/mappy.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/mappy.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -355,7 +295,7 @@ Minimap2.execute(&quot;-x map-ont&quot;, &quot;ref.fa&quot;, &quot;reads.fq&quot
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/mappy.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/mappy.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -371,7 +311,7 @@ Minimap2.execute(&quot;-x map-ont&quot;, &quot;ref.fa&quot;, &quot;reads.fq&quot
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/mappy.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/mappy.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -387,7 +327,7 @@ Minimap2.execute(&quot;-x map-ont&quot;, &quot;ref.fa&quot;, &quot;reads.fq&quot
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/52d0e1c16456b709d1799445890b5115c2a80537/src/minimap2/mappy.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/089f02ac2e1f78ebb421a9c4b9cd170a66511775/src/minimap2/mappy.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
