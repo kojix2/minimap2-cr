@@ -15,7 +15,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Crystal
+      - name: Install Crystal (non-Windows)
+        if: runner.os != 'Windows'
         uses: crystal-lang/install-crystal@v1
 
       - name: Install system dependencies (Ubuntu)
@@ -29,13 +30,14 @@ jobs:
             pkg-config \
             zlib1g-dev
 
-      - name: Install build toolchain (Windows/MSYS2)
+      - name: Install build toolchain + Crystal (Windows/MSYS2)
         if: runner.os == 'Windows'
         uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
           update: true
           install: >-
+            mingw-w64-x86_64-crystal
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-make
             mingw-w64-x86_64-zlib
@@ -44,6 +46,15 @@ jobs:
             mingw-w64-x86_64-curl
             tar
             git
+
+      - name: Build minimap2 (non-Windows)
+        if: runner.os != 'Windows'
+        run: crystal run ext/build.cr
+
+      - name: Build minimap2 (Windows/MSYS2)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: crystal run ext/build.cr
 
       - name: Install shards
         if: runner.os != 'Windows'
@@ -56,6 +67,8 @@ jobs:
 
       - name: Run specs
         if: runner.os != 'Windows'
+        env:
+          LD_LIBRARY_PATH: ${{ github.workspace }}/ext
         run: crystal spec
 
       - name: Run specs (Windows/MSYS2)
