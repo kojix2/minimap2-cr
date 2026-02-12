@@ -134,45 +134,28 @@ sudo apt-get install -y build-essential curl bzip2 zlib1g-dev</code></pre>
     <use href="#octicon-link"/>
   </svg>
 </a>Usage</h2>
-<h3><a id="basic-mapping" class="anchor" href="#basic-mapping">
+<h3><a id="new-shortcut" class="anchor" href="#new-shortcut">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Basic mapping</h3>
+</a><code>new</code> (shortcut)</h3>
+<p><code>new</code> accepts keyword options for common settings.</p>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
 
-aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.build
-  .map_ont
-  .with_cigar
-  .with_index(<span class="s">&quot;reference.fasta&quot;</span>)
-
+aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(<span class="s">&quot;reference.fasta&quot;</span>, preset: <span class="s">&quot;map-ont&quot;</span>, cigar: <span class="n">true</span>, threads: <span class="n">4</span>)
 hits <span class="o">=</span> aligner.map(<span class="s">&quot;ACGTACGTACGT&quot;</span>)
 puts hits.size</code></pre>
-<h3><a id="ruby-minimap2-like-quick-start" class="anchor" href="#ruby-minimap2-like-quick-start">
+<h3><a id="new-with-block" class="anchor" href="#new-with-block">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Ruby-minimap2-like quick start</h3>
-<p>This mirrors ruby-minimap2's <code>Aligner#seq</code> + mapping flow.</p>
+</a><code>new</code> with block</h3>
+<p><code>new</code> applies keyword options first, then yields the builder for extra configuration.</p>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
 
-ref_path <span class="o">=</span> <span class="s">&quot;</span><span class="i">#{</span>__DIR__<span class="i">}</span><span class="s">/ext/minimap2/test/MT-human.fa&quot;</span>
-
-aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(ref_path, cigar: <span class="n">true</span>)
-seq     <span class="o">=</span> aligner.seq(<span class="s">&quot;MT_human&quot;</span>, <span class="n">100</span>, <span class="n">200</span>)
-raise <span class="s">&quot;seq not found&quot;</span> <span class="k">unless</span> seq
-
-hits <span class="o">=</span> aligner.map(seq, cs: <span class="n">true</span>, md: <span class="n">true</span>)
-pp hits</code></pre>
-<h3><a id="block-style-new" class="anchor" href="#block-style-new">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Block-style <code>new</code></h3>
-<p><code>new</code> can take keyword options and a block; keyword options are applied first.</p>
-<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
-
-aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(<span class="s">&quot;reference.fasta&quot;</span>, preset: <span class="s">&quot;map-ont&quot;</span>, cigar: <span class="n">true</span>) <span class="k">do</span> <span class="o">|</span>b<span class="o">|</span>
+aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(<span class="s">&quot;reference.fasta&quot;</span>) <span class="k">do</span> <span class="o">|</span>b<span class="o">|</span>
+  b.map_ont
+  b.with_cigar
   b.with_index_threads(<span class="n">4</span>)
 <span class="k">end</span></code></pre>
 <h3><a id="utilities" class="anchor" href="#utilities">
