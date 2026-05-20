@@ -5,9 +5,9 @@ module Minimap2
   {% if flag?(:msvc) %}
     {% raise "minimap2-cr: MSVC toolchain is not supported. Use MinGW/MSYS2 (win32+gnu)." %}
   {% elsif flag?(:win32) && flag?(:gnu) %}
-    @[Link(ldflags: "-L#{__DIR__}/../../ext -lminimap2 -lz -lwinpthread")]
+    @[Link(ldflags: "#{__DIR__}/../../ext/libminimap2.a -lz -lwinpthread")]
   {% else %}
-    @[Link(ldflags: "-Wl,-rpath,#{__DIR__}/../../ext -L#{__DIR__}/../../ext -lminimap2 -lm -lz -lpthread")]
+    @[Link(ldflags: "#{__DIR__}/../../ext/libminimap2.a -lm -lz -lpthread")]
   {% end %}
   lib LibMinimap2
     type MmIdxReaderT = Void
