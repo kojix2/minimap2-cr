@@ -136,30 +136,87 @@ sudo apt-get install -y build-essential curl bzip2 zlib1g-dev</code></pre>
     <use href="#octicon-link"/>
   </svg>
 </a>Usage</h2>
-<h3><a id="new-shortcut" class="anchor" href="#new-shortcut">
+<h3><a id="quick-start" class="anchor" href="#quick-start">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a><code>new</code> (shortcut)</h3>
-<p><code>new</code> accepts keyword options for common settings.</p>
+</a>Quick Start</h3>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
 
-aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(<span class="s">&quot;reference.fasta&quot;</span>, preset: <span class="s">&quot;map-ont&quot;</span>, cigar: <span class="n">true</span>, threads: <span class="n">4</span>)
-hits <span class="o">=</span> aligner.map(<span class="s">&quot;ACGTACGTACGT&quot;</span>)
-puts hits.size</code></pre>
-<h3><a id="new-with-block" class="anchor" href="#new-with-block">
+aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(
+  <span class="s">&quot;reference.fasta&quot;</span>,
+  preset: <span class="s">&quot;map-ont&quot;</span>,
+  cigar: <span class="n">true</span>,
+  threads: <span class="n">4</span>
+)
+
+hits <span class="o">=</span> aligner.map(<span class="s">&quot;ACGTACGTACGT&quot;</span>, cs: <span class="n">true</span>, md: <span class="n">true</span>, ds: <span class="n">true</span>)
+pp hits.first?</code></pre>
+<h3><a id="builder-style-recommended-for-explicit-config" class="anchor" href="#builder-style-recommended-for-explicit-config">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a><code>new</code> with block</h3>
-<p><code>new</code> applies keyword options first, then yields the builder for extra configuration.</p>
+</a>Builder Style (recommended for explicit config)</h3>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
 
-aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(<span class="s">&quot;reference.fasta&quot;</span>) <span class="k">do</span> <span class="o">|</span>b<span class="o">|</span>
-  b.map_ont
-  b.with_cigar
-  b.with_index_threads(<span class="n">4</span>)
-<span class="k">end</span></code></pre>
+aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.build
+  .map_hifi
+  .with_cigar
+  .with_index_threads(<span class="n">4</span>)
+  .with_index(<span class="s">&quot;reference.fasta&quot;</span>)</code></pre>
+<p>Available builder presets:</p>
+<ul>
+<li><code>map_ont</code></li>
+<li><code>map_hifi</code></li>
+<li><code>map_pb</code></li>
+<li><code>splice</code></li>
+<li><code>splice_hq</code></li>
+<li><code>splice_sr</code></li>
+<li><code>asm5</code></li>
+<li><code>asm10</code></li>
+<li><code>asm20</code></li>
+<li><code>sr</code></li>
+</ul>
+<h3><a id="practical-mapping-options" class="anchor" href="#practical-mapping-options">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Practical Mapping Options</h3>
+<p><code>map</code> supports these high-level toggles:</p>
+<ul>
+<li><code>cs: true</code>: emit <code>cs</code> tag text</li>
+<li><code>md: true</code>: emit <code>MD</code> tag text</li>
+<li><code>ds: true</code>: emit <code>ds</code> tag text (INDEL uncertainty extension)</li>
+</ul>
+<p>Returned fields are available on <code><a href="Minimap2/Mapping.html">Minimap2::Mapping</a></code> as <code>cs</code>, <code>md</code>, and <code>ds</code>.</p>
+<p>You can also pass minimap2 flags directly via <code>extra_flags</code>:</p>
+<pre><code class="language-crystal">hits <span class="o">=</span> aligner.map(
+  query,
+  extra_flags: [
+    <span class="t">Minimap2</span><span class="t">::</span><span class="t">LibMinimap2</span><span class="t">::</span><span class="t">OUT_MD</span>.to_u64,
+    <span class="t">Minimap2</span><span class="t">::</span><span class="t">LibMinimap2</span><span class="t">::</span><span class="t">EQX</span>.to_u64,
+  ]
+)</code></pre>
+<h3><a id="api-notes" class="anchor" href="#api-notes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>API Notes</h3>
+<ul>
+<li><code>Aligner.new(...)</code> is a shortcut wrapper around the builder.</li>
+<li><code>Aligner.build</code> gives full control and is preferred for non-trivial setups.</li>
+<li><code>Aligner#seq(name, start, stop)</code> reads reference subsequences from the loaded index.</li>
+</ul>
+<h2><a id="upstream-minimap2-references" class="anchor" href="#upstream-minimap2-references">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Upstream minimap2 references</h2>
+<ul>
+<li>Presets and command behavior: https://github.com/lh3/minimap2#readme</li>
+<li>CLI/manpage options (<code>--cs</code>, <code>--MD</code>, <code>--ds</code>): https://github.com/lh3/minimap2/blob/master/minimap2.1</li>
+<li><code>ds</code> tag background (release note): https://github.com/lh3/minimap2/blob/master/NEWS.md</li>
+</ul>
 <h3><a id="utilities" class="anchor" href="#utilities">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
