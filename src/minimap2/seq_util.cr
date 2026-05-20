@@ -1,9 +1,12 @@
 module Minimap2
   # Utilities adapted from minimap2 mappy helpers.
+  #
+  # Returns the reverse-complement of a DNA/RNA sequence string.
   def self.revcomp(seq : String) : String
     revcomp(seq.to_slice)
   end
 
+  # Returns the reverse-complement of a sequence byte slice.
   def self.revcomp(seq : Bytes) : String
     return "" if seq.empty?
 
@@ -16,6 +19,9 @@ module Minimap2
     end
   end
 
+  # Fetch a subsequence from an index by contig name.
+  #
+  # Coordinates are 0-based, half-open (`start...stop`).
   def self.fetch_seq(idx : Pointer(LibMinimap2::MmIdxT), name : String, start : Int32 = 0, stop : Int32 = Int32::MAX) : String?
     return nil if idx.null?
 
@@ -36,6 +42,9 @@ module Minimap2
     decode_seq(buf, got)
   end
 
+  # Build an in-memory index from a single sequence.
+  #
+  # Useful for tests and small ad-hoc alignment tasks.
   def self.idx_seq(seq : String, w : Int32, k : Int32, is_hpc : Bool = false, bucket_bits : Int32 = 14) : Pointer(LibMinimap2::MmIdxT)
     bytes = seq.to_slice
     buf = Bytes.new(bytes.size + 1)

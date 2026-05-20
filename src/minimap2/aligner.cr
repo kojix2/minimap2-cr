@@ -1,4 +1,5 @@
 module Minimap2
+  # High-level aligner API backed by minimap2 index and mapping routines.
   class Aligner
     getter idx_opt : LibMinimap2::MmIdxoptT
     getter map_opt : LibMinimap2::MmMapoptT
@@ -8,6 +9,7 @@ module Minimap2
     @threads : Int32
     @idx_parts : Array(Pointer(LibMinimap2::MmIdxT))
 
+    # Create a new `AlignerBuilder`.
     def self.build : AlignerBuilder
       AlignerBuilder.new
     end
@@ -17,6 +19,9 @@ module Minimap2
       build
     end
 
+    # Shortcut constructor using common options.
+    #
+    # Prefer `Aligner.build` for explicit configuration chains.
     def self.new(path : String, preset : String? = nil, threads : Int32 = 1, output : String? = nil, cigar : Bool = false)
       builder = AlignerBuilder.new
       builder.preset(preset) if preset
@@ -25,6 +30,9 @@ module Minimap2
       builder.with_index(path, output)
     end
 
+    # Shortcut constructor with additional builder customization block.
+    #
+    # Keyword options are applied before yielding the builder.
     def self.new(path : String, preset : String? = nil, threads : Int32 = 1, output : String? = nil, cigar : Bool = false, &block : AlignerBuilder ->)
       builder = AlignerBuilder.new
       builder.preset(preset) if preset
@@ -51,11 +59,15 @@ module Minimap2
       raise "Failed to build index" if @idx_parts.empty?
     end
 
+    # Number of reference sequences in the first loaded index part.
     def n_seq : UInt32
       return 0_u32 if @idx_parts.empty?
       @idx_parts[0].value.n_seq
     end
 
+    # Fetch a reference subsequence by contig name.
+    #
+    # Coordinates are 0-based, half-open (`start...stop`).
     def seq(name : String, start : Int32 = 0, stop : Int32 = Int32::MAX) : String?
       return nil if @idx_parts.empty?
 
@@ -83,10 +95,16 @@ module Minimap2
       nil
     end
 
+    # Map a query string against the loaded index.
+    #
+    # Set `cs`, `md`, `ds` to include optional alignment tag strings.
     def map(seq : String, cs : Bool = false, md : Bool = false, ds : Bool = false, max_frag_len : Int32? = nil, extra_flags : Array(UInt64)? = nil, query_name : String? = nil) : Array(Mapping)
       map(seq.to_slice, cs, md, ds, max_frag_len, extra_flags, query_name)
     end
 
+    # Map a query byte slice against the loaded index.
+    #
+    # `extra_flags` accepts raw minimap2 flag constants from `LibMinimap2`.
     def map(seq : Bytes, cs : Bool = false, md : Bool = false, ds : Bool = false, max_frag_len : Int32? = nil, extra_flags : Array(UInt64)? = nil, query_name : String? = nil) : Array(Mapping)
       raise "Sequence is empty" if seq.empty?
       mapopt = prepare_mapopt(max_frag_len, extra_flags)
@@ -104,6 +122,7 @@ module Minimap2
       end
     end
 
+    # Release loaded minimap2 index parts.
     def finalize
       @idx_parts.each do |idx|
         LibMinimap2.mm_idx_destroy(idx)
