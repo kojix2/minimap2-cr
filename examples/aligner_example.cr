@@ -6,18 +6,10 @@ aligner = Minimap2::Aligner.build.with_cigar.with_index(ref_path)
 
 # read a subsequence from the reference
 # positions are 0-based, end is exclusive
-seq = String.build do |io|
-  File.open(ref_path) do |fh|
-    fh.each_line do |line|
-      next if line.empty? || line.starts_with?(">")
-      io << line.strip
-    end
-  end
-end
-subseq = seq[100, 100]
+subseq = aligner.seq("MT_human", 100, 200)
 
 # mapping
-hits = aligner.map(subseq, cs: true, md: true)
+hits = aligner.map(subseq, cs: true, md: true) if subseq
 
 # show result
 pp hits
