@@ -66,72 +66,39 @@ module Minimap2
 
   private def self.complement(byte : UInt8) : Char
     case byte
-    when 'A'.ord
-      'T'
-    when 'C'.ord
-      'G'
-    when 'G'.ord
-      'C'
-    when 'T'.ord
-      'A'
-    when 'U'.ord
-      'A'
-    when 'R'.ord
-      'Y'
-    when 'Y'.ord
-      'R'
-    when 'S'.ord
-      'S'
-    when 'W'.ord
-      'W'
-    when 'K'.ord
-      'M'
-    when 'M'.ord
-      'K'
-    when 'B'.ord
-      'V'
-    when 'D'.ord
-      'H'
-    when 'H'.ord
-      'D'
-    when 'V'.ord
-      'B'
-    when 'N'.ord
-      'N'
-    when 'a'.ord
-      't'
-    when 'c'.ord
-      'g'
-    when 'g'.ord
-      'c'
-    when 't'.ord
-      'a'
-    when 'u'.ord
-      'a'
-    when 'r'.ord
-      'y'
-    when 'y'.ord
-      'r'
-    when 's'.ord
-      's'
-    when 'w'.ord
-      'w'
-    when 'k'.ord
-      'm'
-    when 'm'.ord
-      'k'
-    when 'b'.ord
-      'v'
-    when 'd'.ord
-      'h'
-    when 'h'.ord
-      'd'
-    when 'v'.ord
-      'b'
-    when 'n'.ord
-      'n'
-    else
-      'N'
+    when 'A'.ord then 'T'
+    when 'C'.ord then 'G'
+    when 'G'.ord then 'C'
+    when 'T'.ord then 'A'
+    when 'U'.ord then 'A'
+    when 'R'.ord then 'Y'
+    when 'Y'.ord then 'R'
+    when 'S'.ord then 'S'
+    when 'W'.ord then 'W'
+    when 'K'.ord then 'M'
+    when 'M'.ord then 'K'
+    when 'B'.ord then 'V'
+    when 'D'.ord then 'H'
+    when 'H'.ord then 'D'
+    when 'V'.ord then 'B'
+    when 'N'.ord then 'N'
+    when 'a'.ord then 't'
+    when 'c'.ord then 'g'
+    when 'g'.ord then 'c'
+    when 't'.ord then 'a'
+    when 'u'.ord then 'a'
+    when 'r'.ord then 'y'
+    when 'y'.ord then 'r'
+    when 's'.ord then 's'
+    when 'w'.ord then 'w'
+    when 'k'.ord then 'm'
+    when 'm'.ord then 'k'
+    when 'b'.ord then 'v'
+    when 'd'.ord then 'h'
+    when 'h'.ord then 'd'
+    when 'v'.ord then 'b'
+    when 'n'.ord then 'n'
+    else 'N'
     end
   end
 end
