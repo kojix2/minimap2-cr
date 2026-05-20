@@ -1,4 +1,5 @@
 module Minimap2
+  # Utilities adapted from minimap2 mappy helpers.
   def self.revcomp(seq : String) : String
     revcomp(seq.to_slice)
   end
