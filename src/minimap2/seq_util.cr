@@ -108,7 +108,7 @@ module Minimap2
     when 'h'.ord then 'd'
     when 'v'.ord then 'b'
     when 'n'.ord then 'n'
-    else 'N'
+    else              'N'
     end
   end
 end
