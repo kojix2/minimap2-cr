@@ -83,11 +83,11 @@ module Minimap2
       nil
     end
 
-    def map(seq : String, cs : Bool = false, md : Bool = false, max_frag_len : Int32? = nil, extra_flags : Array(UInt64)? = nil, query_name : String? = nil) : Array(Mapping)
-      map(seq.to_slice, cs, md, max_frag_len, extra_flags, query_name)
+    def map(seq : String, cs : Bool = false, md : Bool = false, ds : Bool = false, max_frag_len : Int32? = nil, extra_flags : Array(UInt64)? = nil, query_name : String? = nil) : Array(Mapping)
+      map(seq.to_slice, cs, md, ds, max_frag_len, extra_flags, query_name)
     end
 
-    def map(seq : Bytes, cs : Bool = false, md : Bool = false, max_frag_len : Int32? = nil, extra_flags : Array(UInt64)? = nil, query_name : String? = nil) : Array(Mapping)
+    def map(seq : Bytes, cs : Bool = false, md : Bool = false, ds : Bool = false, max_frag_len : Int32? = nil, extra_flags : Array(UInt64)? = nil, query_name : String? = nil) : Array(Mapping)
       raise "Sequence is empty" if seq.empty?
       mapopt = prepare_mapopt(max_frag_len, extra_flags)
       qname_ptr = query_name ? query_name.to_unsafe : Pointer(LibC::Char).null
@@ -97,7 +97,7 @@ module Minimap2
         all_mappings = [] of Mapping
 
         @idx_parts.each do |idx|
-          all_mappings.concat(map_with_index(idx, seq, mapopt, tbuf, qname_ptr, km, cs, md))
+          all_mappings.concat(map_with_index(idx, seq, mapopt, tbuf, qname_ptr, km, cs, md, ds))
         end
 
         all_mappings
@@ -177,7 +177,7 @@ module Minimap2
       end
     end
 
-    private def map_with_index(idx : Pointer(LibMinimap2::MmIdxT), seq : Bytes, mapopt : LibMinimap2::MmMapoptT, tbuf, qname_ptr : Pointer(LibC::Char), km : Void*, cs : Bool, md : Bool) : Array(Mapping)
+    private def map_with_index(idx : Pointer(LibMinimap2::MmIdxT), seq : Bytes, mapopt : LibMinimap2::MmMapoptT, tbuf, qname_ptr : Pointer(LibC::Char), km : Void*, cs : Bool, md : Bool, ds : Bool) : Array(Mapping)
       n_regs = 0
       reg_ptr = LibMinimap2.mm_map(idx, seq.size, seq.to_unsafe.as(LibC::Char*), pointerof(n_regs), tbuf, pointerof(mapopt), qname_ptr)
       return [] of Mapping if reg_ptr.null? || n_regs == 0
@@ -207,6 +207,7 @@ module Minimap2
           nm = 0
           md_str : String? = nil
           cs_str : String? = nil
+          ds_str : String? = nil
 
           if !reg.p.null?
             extra_ptr = reg.p
@@ -222,6 +223,9 @@ module Minimap2
             end
             if md
               md_str = gen_md(km, idx, regs + i, seq)
+            end
+            if ds
+              ds_str = gen_ds(km, idx, regs + i, seq)
             end
 
             LibC.free(reg.p.as(Void*))
@@ -243,7 +247,8 @@ module Minimap2
             cigar_str,
             nm,
             md_str,
-            cs_str
+            cs_str,
+            ds_str
           )
         end
       ensure
@@ -309,6 +314,12 @@ module Minimap2
     private def gen_cs(km : Void*, idx : Pointer(LibMinimap2::MmIdxT), reg_ptr : Pointer(LibMinimap2::MmReg1T), seq : Bytes) : String
       generate_string(km, idx, reg_ptr, seq) do |km, buf, max_len, idx, reg_ptr, seq|
         LibMinimap2.mm_gen_cs(km, buf, max_len, idx, reg_ptr, seq, 1)
+      end
+    end
+
+    private def gen_ds(km : Void*, idx : Pointer(LibMinimap2::MmIdxT), reg_ptr : Pointer(LibMinimap2::MmReg1T), seq : Bytes) : String
+      generate_string(km, idx, reg_ptr, seq) do |km, buf, max_len, idx, reg_ptr, seq|
+        LibMinimap2.mm_gen_ds(km, buf, max_len, idx, reg_ptr, seq, 1)
       end
     end
   end

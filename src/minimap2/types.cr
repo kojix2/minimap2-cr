@@ -33,6 +33,7 @@ module Minimap2
     getter nm : Int32
     getter md : String?
     getter cs : String?
+    getter ds : String?
 
     def initialize(
       @query_start : Int32,
@@ -51,6 +52,7 @@ module Minimap2
       @nm : Int32,
       @md : String?,
       @cs : String?,
+      @ds : String?,
     )
     end
   end

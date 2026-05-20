@@ -50,6 +50,18 @@ describe Minimap2 do
     mappings[0].md.should_not be_nil
   end
 
+  it "emits ds when requested" do
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
+    aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(ref_path)
+
+    seq = load_fasta_sequence(ref_path, 120)
+    seq.empty?.should eq(false)
+
+    mappings = aligner.map(seq, ds: true)
+    mappings.size.should be > 0
+    mappings[0].ds.should_not be_nil
+  end
+
   it "reports sequence count" do
     ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
     aligner = Minimap2::Aligner.build.map_ont.with_index(ref_path)
