@@ -30,31 +30,80 @@ sudo apt-get install -y build-essential curl bzip2 zlib1g-dev
 
 ## Usage
 
-### `new` (shortcut)
-
-`new` accepts keyword options for common settings.
+### Quick Start
 
 ```crystal
 require "minimap2"
 
-aligner = Minimap2::Aligner.new("reference.fasta", preset: "map-ont", cigar: true, threads: 4)
-hits = aligner.map("ACGTACGTACGT")
-puts hits.size
+aligner = Minimap2::Aligner.new(
+  "reference.fasta",
+  preset: "map-ont",
+  cigar: true,
+  threads: 4
+)
+
+hits = aligner.map("ACGTACGTACGT", cs: true, md: true, ds: true)
+pp hits.first?
 ```
 
-### `new` with block
-
-`new` applies keyword options first, then yields the builder for extra configuration.
+### Builder Style (recommended for explicit config)
 
 ```crystal
 require "minimap2"
 
-aligner = Minimap2::Aligner.new("reference.fasta") do |b|
-  b.map_ont
-  b.with_cigar
-  b.with_index_threads(4)
-end
+aligner = Minimap2::Aligner.build
+  .map_hifi
+  .with_cigar
+  .with_index_threads(4)
+  .with_index("reference.fasta")
 ```
+
+Available builder presets:
+
+- `map_ont`
+- `map_hifi`
+- `map_pb`
+- `splice`
+- `splice_hq`
+- `splice_sr`
+- `asm5`
+- `asm10`
+- `asm20`
+- `sr`
+
+### Practical Mapping Options
+
+`map` supports these high-level toggles:
+
+- `cs: true`: emit `cs` tag text
+- `md: true`: emit `MD` tag text
+- `ds: true`: emit `ds` tag text (INDEL uncertainty extension)
+
+Returned fields are available on `Minimap2::Mapping` as `cs`, `md`, and `ds`.
+
+You can also pass minimap2 flags directly via `extra_flags`:
+
+```crystal
+hits = aligner.map(
+  query,
+  extra_flags: [
+    Minimap2::LibMinimap2::OUT_MD.to_u64,
+    Minimap2::LibMinimap2::EQX.to_u64,
+  ]
+)
+```
+
+### API Notes
+
+- `Aligner.new(...)` is a shortcut wrapper around the builder.
+- `Aligner.build` gives full control and is preferred for non-trivial setups.
+- `Aligner#seq(name, start, stop)` reads reference subsequences from the loaded index.
+
+## Upstream minimap2 references
+
+- Presets and command behavior: https://github.com/lh3/minimap2#readme
+- CLI/manpage options (`--cs`, `--MD`, `--ds`): https://github.com/lh3/minimap2/blob/master/minimap2.1
+- `ds` tag background (release note): https://github.com/lh3/minimap2/blob/master/NEWS.md
 
 ### Utilities
 
