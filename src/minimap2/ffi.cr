@@ -1,7 +1,4 @@
 module Minimap2
-  MM_F_CIGAR  = 0x004_i64
-  MM_F_OUT_CS = 0x040_i64
-
   {% if flag?(:msvc) %}
     {% raise "minimap2-cr: MSVC toolchain is not supported. Use MinGW/MSYS2 (win32+gnu)." %}
   {% elsif flag?(:win32) && flag?(:gnu) %}
@@ -10,6 +7,48 @@ module Minimap2
     @[Link(ldflags: "#{__DIR__}/../../ext/libminimap2.a -lm -lz -lpthread")]
   {% end %}
   lib LibMinimap2
+    NO_DIAG        =         0x001_i64
+    NO_DUAL        =         0x002_i64
+    CIGAR          =         0x004_i64
+    OUT_SAM        =         0x008_i64
+    NO_QUAL        =         0x010_i64
+    OUT_CG         =         0x020_i64
+    OUT_CS         =         0x040_i64
+    SPLICE         =         0x080_i64
+    SPLICE_FOR     =         0x100_i64
+    SPLICE_REV     =         0x200_i64
+    NO_LJOIN       =         0x400_i64
+    OUT_CS_LONG    =         0x800_i64
+    SR             =        0x1000_i64
+    FRAG_MODE      =        0x2000_i64
+    NO_PRINT_2ND   =        0x4000_i64
+    TWO_IO_THREADS =        0x8000_i64 # 2_IO_THEADS
+    LONG_CIGAR     =       0x10000_i64
+    INDEPEND_SEG   =       0x20000_i64
+    SPLICE_FLANK   =       0x40000_i64
+    SOFTCLIP       =       0x80000_i64
+    FOR_ONLY       =      0x100000_i64
+    REV_ONLY       =      0x200000_i64
+    HEAP_SORT      =      0x400000_i64
+    ALL_CHAINS     =      0x800000_i64
+    OUT_MD         =     0x1000000_i64
+    COPY_COMMENT   =     0x2000000_i64
+    EQX            =     0x4000000_i64
+    PAF_NO_HIT     =     0x8000000_i64
+    NO_END_FLT     =    0x10000000_i64
+    HARD_MLEVEL    =    0x20000000_i64
+    SAM_HIT_ONLY   =    0x40000000_i64
+    RMQ            =    0x80000000_i64
+    QSTRAND        =   0x100000000_i64
+    NO_INV         =   0x200000000_i64
+    NO_HASH_NAME   =   0x400000000_i64
+    SPLICE_OLD     =   0x800000000_i64
+    SECONDARY_SEQ  =  0x1000000000_i64
+    OUT_DS         =  0x2000000000_i64
+    WEAK_PAIRING   =  0x4000000000_i64
+    SR_RNA         =  0x8000000000_i64
+    OUT_JUNC       = 0x10000000000_i64
+
     type MmIdxReaderT = Void
     type MmTbufT = Void
 
@@ -148,7 +187,7 @@ module Minimap2
     fun mm_mapopt_update(opt : MmMapoptT*, mi : MmIdxT*) : Void
     fun mm_mapopt_max_intron_len(opt : MmMapoptT*, max_intron_len : Int32) : Void
 
-    fun mm_idxopt_init(opt : MmIdxoptT*) : Void
+    # mm_idxopt_init was dropped because it is deprecated.
     fun mm_mapopt_init(opt : MmMapoptT*) : Void
 
     fun mm_idx_reader_open(fn : LibC::Char*, opt : MmIdxoptT*, fn_out : LibC::Char*) : MmIdxReaderT*
@@ -182,6 +221,7 @@ module Minimap2
     fun mm_map_file(idx : MmIdxT*, fn : LibC::Char*, opt : MmMapoptT*, n_threads : Int32) : Int32
     fun mm_map_file_frag(idx : MmIdxT*, n_segs : Int32, fn : LibC::Char**, opt : MmMapoptT*, n_threads : Int32) : Int32
     fun mm_gen_cs(km : Void*, buf : LibC::Char**, max_len : Int32*, mi : MmIdxT*, r : MmReg1T*, seq : LibC::Char*, no_iden : Int32) : Int32
+    fun mm_gen_ds(km : Void*, buf : LibC::Char**, max_len : Int32*, mi : MmIdxT*, r : MmReg1T*, seq : LibC::Char*, no_iden : Int32) : Int32
     fun mm_gen_MD(km : Void*, buf : LibC::Char**, max_len : Int32*, mi : MmIdxT*, r : MmReg1T*, seq : LibC::Char*) : Int32
 
     fun mm_idx_build(fn : LibC::Char*, w : Int32, k : Int32, flag : Int32, n_threads : Int32) : MmIdxT*

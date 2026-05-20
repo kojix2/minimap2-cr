@@ -38,7 +38,7 @@ module Minimap2
     {% end %}
 
     def with_cigar : self
-      @mapopt.flag |= MM_F_CIGAR | MM_F_OUT_CS
+      @mapopt.flag |= LibMinimap2::CIGAR | LibMinimap2::OUT_CS
       self
     end
 
