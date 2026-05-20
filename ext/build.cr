@@ -1,7 +1,7 @@
 require "file_utils"
 require "random/secure"
 
-TAG     = "v2.30"
+TAG     = "v2.31"
 VERSION = TAG.lchop('v')
 TARBALL = "minimap2-#{VERSION}.tar.bz2"
 URL     = "https://github.com/lh3/minimap2/releases/download/#{TAG}/#{TARBALL}"
