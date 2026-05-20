@@ -113,6 +113,17 @@
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>High-level aligner API backed by minimap2 index and mapping routines.</p>
+
 
 
 
@@ -138,7 +149,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L2" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L3" target="_blank">
         minimap2/aligner.cr
       </a>
     
@@ -163,10 +174,14 @@
       <li class="entry-summary">
         <a href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%2Ccigar%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>, cigar : Bool = <span class="n">false</span>)</a>
         
+          <div class="summary"><p>Shortcut constructor using common options.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%2Ccigar%3ABool%3Dfalse%2C%26block%3AAlignerBuilder-%3E%29-class-method" class="signature"><strong>.new</strong>(path : String, preset : String | Nil = <span class="n">nil</span>, threads : Int32 = <span class="n">1</span>, output : String | Nil = <span class="n">nil</span>, cigar : Bool = <span class="n">false</span>, &block : AlignerBuilder -> )</a>
+        
+          <div class="summary"><p>Shortcut constructor with additional builder customization block.</p></div>
         
       </li>
     
@@ -191,6 +206,8 @@
     
       <li class="entry-summary">
         <a href="#build%3AAlignerBuilder-class-method" class="signature"><strong>.build</strong> : AlignerBuilder</a>
+        
+          <div class="summary"><p>Create a new <code><a href="../Minimap2/AlignerBuilder.html">AlignerBuilder</a></code>.</p></div>
         
       </li>
     
@@ -225,6 +242,8 @@
       <li class="entry-summary">
         <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
         
+          <div class="summary"><p>Release loaded minimap2 index parts.</p></div>
+        
       </li>
     
       <li class="entry-summary">
@@ -235,10 +254,14 @@
       <li class="entry-summary">
         <a href="#map%28seq%3AString%2Ccs%3ABool%3Dfalse%2Cmd%3ABool%3Dfalse%2Cds%3ABool%3Dfalse%2Cmax_frag_len%3AInt32%7CNil%3Dnil%2Cextra_flags%3AArray%28UInt64%29%7CNil%3Dnil%2Cquery_name%3AString%7CNil%3Dnil%29%3AArray%28Mapping%29-instance-method" class="signature"><strong>#map</strong>(seq : String, cs : Bool = <span class="n">false</span>, md : Bool = <span class="n">false</span>, ds : Bool = <span class="n">false</span>, max_frag_len : Int32 | Nil = <span class="n">nil</span>, extra_flags : Array(UInt64) | Nil = <span class="n">nil</span>, query_name : String | Nil = <span class="n">nil</span>) : Array(Mapping)</a>
         
+          <div class="summary"><p>Map a query string against the loaded index.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#map%28seq%3ABytes%2Ccs%3ABool%3Dfalse%2Cmd%3ABool%3Dfalse%2Cds%3ABool%3Dfalse%2Cmax_frag_len%3AInt32%7CNil%3Dnil%2Cextra_flags%3AArray%28UInt64%29%7CNil%3Dnil%2Cquery_name%3AString%7CNil%3Dnil%29%3AArray%28Mapping%29-instance-method" class="signature"><strong>#map</strong>(seq : Bytes, cs : Bool = <span class="n">false</span>, md : Bool = <span class="n">false</span>, ds : Bool = <span class="n">false</span>, max_frag_len : Int32 | Nil = <span class="n">nil</span>, extra_flags : Array(UInt64) | Nil = <span class="n">nil</span>, query_name : String | Nil = <span class="n">nil</span>) : Array(Mapping)</a>
+        
+          <div class="summary"><p>Map a query byte slice against the loaded index.</p></div>
         
       </li>
     
@@ -250,10 +273,14 @@
       <li class="entry-summary">
         <a href="#n_seq%3AUInt32-instance-method" class="signature"><strong>#n_seq</strong> : UInt32</a>
         
+          <div class="summary"><p>Number of reference sequences in the first loaded index part.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#seq%28name%3AString%2Cstart%3AInt32%3D0%2Cstop%3AInt32%3DInt32%3A%3AMAX%29%3AString%7CNil-instance-method" class="signature"><strong>#seq</strong>(name : String, start : Int32 = <span class="n">0</span>, stop : Int32 = <span class="t">Int32</span><span class="t">::</span><span class="t">MAX</span>) : String | Nil</a>
+        
+          <div class="summary"><p>Fetch a reference subsequence by contig name.</p></div>
         
       </li>
     
@@ -309,10 +336,16 @@
         <a class="method-permalink" href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%2Ccigar%3ABool%3Dfalse%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Shortcut constructor using common options.</p>
+<p>Prefer <code><a href="../Minimap2/Aligner.html#build%3AAlignerBuilder-class-method">Aligner.build</a></code> for explicit configuration chains.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -325,10 +358,16 @@
         <a class="method-permalink" href="#new%28path%3AString%2Cpreset%3AString%7CNil%3Dnil%2Cthreads%3AInt32%3D1%2Coutput%3AString%7CNil%3Dnil%2Ccigar%3ABool%3Dfalse%2C%26block%3AAlignerBuilder-%3E%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Shortcut constructor with additional builder customization block.</p>
+<p>Keyword options are applied before yielding the builder.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -344,7 +383,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -369,10 +408,15 @@
         <a class="method-permalink" href="#build%3AAlignerBuilder-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Create a new <code><a href="../Minimap2/AlignerBuilder.html">AlignerBuilder</a></code>.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -393,7 +437,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -409,7 +453,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L132" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -436,10 +480,15 @@
         <a class="method-permalink" href="#finalize-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Release loaded minimap2 index parts.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L107" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L126" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -455,7 +504,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -468,10 +517,16 @@
         <a class="method-permalink" href="#map%28seq%3AString%2Ccs%3ABool%3Dfalse%2Cmd%3ABool%3Dfalse%2Cds%3ABool%3Dfalse%2Cmax_frag_len%3AInt32%7CNil%3Dnil%2Cextra_flags%3AArray%28UInt64%29%7CNil%3Dnil%2Cquery_name%3AString%7CNil%3Dnil%29%3AArray%28Mapping%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Map a query string against the loaded index.</p>
+<p>Set <code>cs</code>, <code>md</code>, <code>ds</code> to include optional alignment tag strings.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L86" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -484,10 +539,16 @@
         <a class="method-permalink" href="#map%28seq%3ABytes%2Ccs%3ABool%3Dfalse%2Cmd%3ABool%3Dfalse%2Cds%3ABool%3Dfalse%2Cmax_frag_len%3AInt32%7CNil%3Dnil%2Cextra_flags%3AArray%28UInt64%29%7CNil%3Dnil%2Cquery_name%3AString%7CNil%3Dnil%29%3AArray%28Mapping%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Map a query byte slice against the loaded index.</p>
+<p><code>extra_flags</code> accepts raw minimap2 flag constants from <code>LibMinimap2</code>.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L90" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L108" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -503,7 +564,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -516,10 +577,15 @@
         <a class="method-permalink" href="#n_seq%3AUInt32-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Number of reference sequences in the first loaded index part.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -532,10 +598,16 @@
         <a class="method-permalink" href="#seq%28name%3AString%2Cstart%3AInt32%3D0%2Cstop%3AInt32%3DInt32%3A%3AMAX%29%3AString%7CNil-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Fetch a reference subsequence by contig name.</p>
+<p>Coordinates are 0-based, half-open (<code>start...stop</code>).</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L71" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -113,6 +113,17 @@
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Builder for creating a <code><a href="../Minimap2/Aligner.html">Minimap2::Aligner</a></code> with preset and mapping options.</p>
+
 
 
 
@@ -138,7 +149,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L2" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L3" target="_blank">
         minimap2/builder.cr
       </a>
     
@@ -173,6 +184,10 @@
   sr: <span class="s">&quot;sr&quot;</span>,
 }</code>
       </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Preset shortcuts mapped to minimap2 preset strings.</p>
+      </dd>
       
     
   </dl>
@@ -246,6 +261,8 @@
       <li class="entry-summary">
         <a href="#preset%28preset%3AString%29%3Aself-instance-method" class="signature"><strong>#preset</strong>(preset : String) : <span class="k">self</span></a>
         
+          <div class="summary"><p>Apply a minimap2 preset string (e.g.</p></div>
+        
       </li>
     
       <li class="entry-summary">
@@ -271,15 +288,21 @@
       <li class="entry-summary">
         <a href="#with_cigar%3Aself-instance-method" class="signature"><strong>#with_cigar</strong> : <span class="k">self</span></a>
         
+          <div class="summary"><p>Enable CIGAR generation and cs-tag output for mapped records.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#with_index%28path%3AString%2Coutput%3AString%7CNil%3Dnil%29%3AAligner-instance-method" class="signature"><strong>#with_index</strong>(path : String, output : String | Nil = <span class="n">nil</span>) : Aligner</a>
         
+          <div class="summary"><p>Build an aligner from a reference FASTA/MMI path.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#with_index_threads%28threads%3AInt32%29%3Aself-instance-method" class="signature"><strong>#with_index_threads</strong>(threads : Int32) : <span class="k">self</span></a>
+        
+          <div class="summary"><p>Set the number of threads used while building/loading the index.</p></div>
         
       </li>
     
@@ -338,7 +361,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -370,7 +393,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -386,7 +409,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -402,7 +425,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -418,7 +441,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -434,7 +457,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -450,7 +473,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -463,10 +486,15 @@
         <a class="method-permalink" href="#preset%28preset%3AString%29%3Aself-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Apply a minimap2 preset string (e.g. &quot;map-ont&quot;, &quot;map-hifi&quot;, &quot;splice&quot;).</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -482,7 +510,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -498,7 +526,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -514,7 +542,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -530,7 +558,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -543,10 +571,15 @@
         <a class="method-permalink" href="#with_cigar%3Aself-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Enable CIGAR generation and cs-tag output for mapped records.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -559,10 +592,16 @@
         <a class="method-permalink" href="#with_index%28path%3AString%2Coutput%3AString%7CNil%3Dnil%29%3AAligner-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Build an aligner from a reference FASTA/MMI path.</p>
+<p>If <code>output</code> is provided, a built index is written to that path.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L58" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -575,10 +614,15 @@
         <a class="method-permalink" href="#with_index_threads%28threads%3AInt32%29%3Aself-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Set the number of threads used while building/loading the index.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>

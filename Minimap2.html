@@ -136,42 +136,42 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2.cr#L7" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2.cr#L7" target="_blank">
         minimap2.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/aligner.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/aligner.cr#L1" target="_blank">
         minimap2/aligner.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/builder.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/builder.cr#L1" target="_blank">
         minimap2/builder.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/ffi.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/ffi.cr#L1" target="_blank">
         minimap2/ffi.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/seq_util.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/seq_util.cr#L1" target="_blank">
         minimap2/seq_util.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/types.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/types.cr#L1" target="_blank">
         minimap2/types.cr
       </a>
     
@@ -217,10 +217,14 @@
       <li class="entry-summary">
         <a href="#fetch_seq%28idx%3APointer%28LibMinimap2%3A%3AMmIdxT%29%2Cname%3AString%2Cstart%3AInt32%3D0%2Cstop%3AInt32%3DInt32%3A%3AMAX%29%3AString%7CNil-class-method" class="signature"><strong>.fetch_seq</strong>(idx : Pointer(LibMinimap2::MmIdxT), name : String, start : Int32 = <span class="n">0</span>, stop : Int32 = <span class="t">Int32</span><span class="t">::</span><span class="t">MAX</span>) : String | Nil</a>
         
+          <div class="summary"><p>Fetch a subsequence from an index by contig name.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#idx_seq%28seq%3AString%2Cw%3AInt32%2Ck%3AInt32%2Cis_hpc%3ABool%3Dfalse%2Cbucket_bits%3AInt32%3D14%29%3APointer%28LibMinimap2%3A%3AMmIdxT%29-class-method" class="signature"><strong>.idx_seq</strong>(seq : String, w : Int32, k : Int32, is_hpc : Bool = <span class="n">false</span>, bucket_bits : Int32 = <span class="n">14</span>) : Pointer(LibMinimap2::MmIdxT)</a>
+        
+          <div class="summary"><p>Build an in-memory index from a single sequence.</p></div>
         
       </li>
     
@@ -233,6 +237,8 @@
     
       <li class="entry-summary">
         <a href="#revcomp%28seq%3ABytes%29%3AString-class-method" class="signature"><strong>.revcomp</strong>(seq : Bytes) : String</a>
+        
+          <div class="summary"><p>Returns the reverse-complement of a sequence byte slice.</p></div>
         
       </li>
     
@@ -268,10 +274,16 @@
         <a class="method-permalink" href="#fetch_seq%28idx%3APointer%28LibMinimap2%3A%3AMmIdxT%29%2Cname%3AString%2Cstart%3AInt32%3D0%2Cstop%3AInt32%3DInt32%3A%3AMAX%29%3AString%7CNil-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Fetch a subsequence from an index by contig name.</p>
+<p>Coordinates are 0-based, half-open (<code>start...stop</code>).</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/seq_util.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/seq_util.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -284,10 +296,16 @@
         <a class="method-permalink" href="#idx_seq%28seq%3AString%2Cw%3AInt32%2Ck%3AInt32%2Cis_hpc%3ABool%3Dfalse%2Cbucket_bits%3AInt32%3D14%29%3APointer%28LibMinimap2%3A%3AMmIdxT%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Build an in-memory index from a single sequence.</p>
+<p>Useful for tests and small ad-hoc alignment tasks.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/seq_util.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/seq_util.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -303,12 +321,13 @@
         <div class="doc">
           
           <p>Utilities adapted from minimap2 mappy helpers.</p>
+<p>Returns the reverse-complement of a DNA/RNA sequence string.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/seq_util.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/seq_util.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -321,10 +340,15 @@
         <a class="method-permalink" href="#revcomp%28seq%3ABytes%29%3AString-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns the reverse-complement of a sequence byte slice.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/4e2a5b95557d9dc876f858c68691d8c4d34ee4fb/src/minimap2/seq_util.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/6cebdb4029be230ece91e167a30bf0ec42cb1034/src/minimap2/seq_util.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
