@@ -112,26 +112,16 @@ module Minimap2
 
     def self.cigar_op_char(op : UInt8) : Char
       case op
-      when 0
-        'M'
-      when 1
-        'I'
-      when 2
-        'D'
-      when 3
-        'N'
-      when 4
-        'S'
-      when 5
-        'H'
-      when 6
-        'P'
-      when 7
-        '='
-      when 8
-        'X'
-      else
-        '?'
+      when 0 then 'M'
+      when 1 then 'I'
+      when 2 then 'D'
+      when 3 then 'N'
+      when 4 then 'S'
+      when 5 then 'H'
+      when 6 then 'P'
+      when 7 then '='
+      when 8 then 'X'
+      else        '?'
       end
     end
 
