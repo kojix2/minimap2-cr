@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Crystal Docs 1.19.1">
+<meta name="generator" content="Crystal Docs 1.21.0">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="minimap2">
 
@@ -103,139 +103,47 @@
     <use href="#octicon-link"/>
   </svg>
 </a>minimap2-cr</h1>
-<p><a href="https://github.com/kojix2/minimap2-cr/actions/workflows/test.yml"><img src="https://github.com/kojix2/minimap2-cr/actions/workflows/test.yml/badge.svg" alt="CI" /></a>
-<a href="https://tokei.kojix2.net/github/kojix2/minimap2-cr"><img src="https://img.shields.io/endpoint?url=https://tokei.kojix2.net/badge/github/kojix2/minimap2-cr/lines" alt="Lines of Code" /></a></p>
-<p>Crystal bindings for <a href="https://github.com/lh3/minimap2">minimap2</a> (long-read mapper).</p>
-<p>This shard downloads/builds minimap2 during install (see <code>shard.yml</code> <code>postinstall</code>).</p>
+<p><a href="https://github.com/kojix2/minimap2-cr/actions/workflows/test.yml"><img src="https://github.com/kojix2/minimap2-cr/actions/workflows/test.yml/badge.svg" alt="CI" /></a></p>
+<p>Crystal &gt;= 1.19.1 bindings for <a href="https://github.com/lh3/minimap2">minimap2</a>.
+Build/load reference indexes and map sequences with coordinates, MAPQ and CIGAR.</p>
 <h2><a id="installation" class="anchor" href="#installation">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Installation</h2>
-<ol>
-<li>
-<p>Add the dependency to your <code>shard.yml</code>:</p>
+<p>Requires a C compiler, make, curl, tar, bzip2 and zlib development headers.
+On Ubuntu: <code>sudo apt-get install build-essential curl bzip2 zlib1g-dev</code>.
+On macOS, install Xcode Command Line Tools. Windows requires MinGW/MSYS2 with
+<code>MAKE=mingw32-make</code>; see <a href=".github/workflows/test.yml">CI setup</a> for packages.</p>
 <pre><code class="language-yaml">dependencies:
   minimap2:
     github: kojix2/minimap2-cr</code></pre>
-</li>
-<li>
-<p>Run <code>shards install</code></p>
-</li>
-</ol>
-<h3><a id="system-requirements-linux" class="anchor" href="#system-requirements-linux">
+<p>Run <code>shards install</code>. The postinstall hook builds the minimap2 version pinned in
+<a href="ext/build.cr">ext/build.cr</a>. Crystal links <code>ext/libminimap2.a</code> statically;
+setting a shared-library search path is not required.</p>
+<h2><a id="map" class="anchor" href="#map">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>System requirements (Linux)</h3>
-<p>Building minimap2 requires a C toolchain and zlib headers.</p>
-<pre><code class="language-sh">sudo apt-get update
-sudo apt-get install -y build-essential curl bzip2 zlib1g-dev</code></pre>
-<h2><a id="usage" class="anchor" href="#usage">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usage</h2>
-<h3><a id="quick-start" class="anchor" href="#quick-start">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Quick Start</h3>
+</a>Map</h2>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
 
-aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(
-  <span class="s">&quot;reference.fasta&quot;</span>,
-  preset: <span class="s">&quot;map-ont&quot;</span>,
-  cigar: <span class="n">true</span>,
-  threads: <span class="n">4</span>
-)
-
-hits <span class="o">=</span> aligner.map(<span class="s">&quot;ACGTACGTACGT&quot;</span>, cs: <span class="n">true</span>, md: <span class="n">true</span>, ds: <span class="n">true</span>)
-pp hits.first?</code></pre>
-<h3><a id="builder-style-recommended-for-explicit-config" class="anchor" href="#builder-style-recommended-for-explicit-config">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Builder Style (recommended for explicit config)</h3>
-<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
-
-aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.build
-  .map_hifi
-  .with_cigar
-  .with_index_threads(<span class="n">4</span>)
-  .with_index(<span class="s">&quot;reference.fasta&quot;</span>)</code></pre>
-<p>Available builder presets:</p>
-<ul>
-<li><code>map_ont</code></li>
-<li><code>map_hifi</code></li>
-<li><code>map_pb</code></li>
-<li><code>splice</code></li>
-<li><code>splice_hq</code></li>
-<li><code>splice_sr</code></li>
-<li><code>asm5</code></li>
-<li><code>asm10</code></li>
-<li><code>asm20</code></li>
-<li><code>sr</code></li>
-</ul>
-<h3><a id="practical-mapping-options" class="anchor" href="#practical-mapping-options">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Practical Mapping Options</h3>
-<p><code>map</code> supports these high-level toggles:</p>
-<ul>
-<li><code>cs: true</code>: emit <code>cs</code> tag text</li>
-<li><code>md: true</code>: emit <code>MD</code> tag text</li>
-<li><code>ds: true</code>: emit <code>ds</code> tag text (INDEL uncertainty extension)</li>
-</ul>
-<p>Returned fields are available on <code><a href="Minimap2/Mapping.html">Minimap2::Mapping</a></code> as <code>cs</code>, <code>md</code>, and <code>ds</code>.</p>
-<p>You can also pass minimap2 flags directly via <code>extra_flags</code>:</p>
-<pre><code class="language-crystal">hits <span class="o">=</span> aligner.map(
-  query,
-  extra_flags: [
-    <span class="t">Minimap2</span><span class="t">::</span><span class="t">LibMinimap2</span><span class="t">::</span><span class="t">OUT_MD</span>.to_u64,
-    <span class="t">Minimap2</span><span class="t">::</span><span class="t">LibMinimap2</span><span class="t">::</span><span class="t">EQX</span>.to_u64,
-  ]
-)</code></pre>
-<h3><a id="api-notes" class="anchor" href="#api-notes">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>API Notes</h3>
-<ul>
-<li><code>Aligner.new(...)</code> is a shortcut wrapper around the builder.</li>
-<li><code>Aligner.build</code> gives full control and is preferred for non-trivial setups.</li>
-<li><code>Aligner#seq(name, start, stop)</code> reads reference subsequences from the loaded index.</li>
-</ul>
-<h2><a id="upstream-minimap2-references" class="anchor" href="#upstream-minimap2-references">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Upstream minimap2 references</h2>
-<ul>
-<li>Presets and command behavior: https://github.com/lh3/minimap2#readme</li>
-<li>CLI/manpage options (<code>--cs</code>, <code>--MD</code>, <code>--ds</code>): https://github.com/lh3/minimap2/blob/master/minimap2.1</li>
-<li><code>ds</code> tag background (release note): https://github.com/lh3/minimap2/blob/master/NEWS.md</li>
-</ul>
-<h3><a id="utilities" class="anchor" href="#utilities">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Utilities</h3>
-<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;minimap2&quot;</span>
-
-puts <span class="t">Minimap2</span>.revcomp(<span class="s">&quot;ACGTN&quot;</span>)</code></pre>
+aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">::</span><span class="t">Aligner</span>.new(<span class="s">&quot;reference.fa&quot;</span>, preset: <span class="s">&quot;map-ont&quot;</span>, cigar: <span class="n">true</span>)
+hits <span class="o">=</span> aligner.map(<span class="s">&quot;ACGTACGTACGT&quot;</span>, cs: <span class="n">true</span>, md: <span class="n">true</span>)
+hits.each { <span class="o">|</span>hit<span class="o">|</span> puts <span class="s">&quot;</span><span class="i">#{</span>hit.target_name<span class="i">}</span><span class="s">:</span><span class="i">#{</span>hit.target_start<span class="i">}</span><span class="s"> MAPQ=</span><span class="i">#{</span>hit.mapq<span class="i">}</span><span class="s">&quot;</span> }</code></pre>
+<p>Supply your own FASTA or minimap2 index. Coordinates are zero-based and half-open.
+<code>cs:</code>, <code>md:</code> and <code>ds:</code> request alignment tags. <code>aligner.seq(name, start, stop)</code>
+retrieves reference sequence; <code>Minimap2.revcomp(sequence)</code> reverse-complements it.
+For presets and detailed options, use <a href="src/minimap2/builder.cr">AlignerBuilder</a>.</p>
 <h2><a id="development" class="anchor" href="#development">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Development</h2>
-<ul>
-<li>Build vendored minimap2: <code>shards install</code> (runs <code>ext/build.cr</code> via postinstall)</li>
-<li>Run tests: <code>crystal spec</code></li>
-</ul>
-<p>If you see runtime linker errors, try:</p>
-<pre><code class="language-sh">export LD_LIBRARY_PATH=&quot;$PWD/ext&quot;</code></pre>
+<pre><code class="language-sh">shards install
+crystal spec</code></pre>
+<p>To rebuild native code in a local checkout: <code>crystal run ext/build.cr</code>.
+License: <a href="LICENSE">MIT</a>.</p>
 </div>
 </body>
 </html>
