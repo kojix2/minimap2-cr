@@ -35,8 +35,8 @@ module Minimap2
     end
 
     {% for name, value in PRESETS %}
-      def {{name.id}} : self
-        preset({{value}})
+      def {{ name.id }} : self
+        preset({{ value }})
       end
     {% end %}
 

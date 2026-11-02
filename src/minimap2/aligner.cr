@@ -69,7 +69,7 @@ module Minimap2
     #
     # Coordinates are 0-based, half-open (`start...stop`).
     def seq(name : String, start : Int32 = 0, stop : Int32 = Int32::MAX) : String?
-      return nil if @idx_parts.empty?
+      return if @idx_parts.empty?
 
       @idx_parts.each do |idx|
         next if idx.null?
@@ -80,7 +80,7 @@ module Minimap2
 
         seq_entry = idx.value.seq + rid
         seq_len = seq_entry.value.len.to_i
-        return nil if start >= seq_len || start >= stop
+        return if start >= seq_len || start >= stop
 
         en = stop
         en = seq_len if en < 0 || en > seq_len
@@ -268,8 +268,8 @@ module Minimap2
     end
 
     private def gen_md(km : Void*, idx : Pointer(LibMinimap2::MmIdxT), reg_ptr : Pointer(LibMinimap2::MmReg1T), seq : Bytes) : String
-      generate_string(km, idx, reg_ptr, seq) do |km, buf, max_len, idx, reg_ptr, seq|
-        LibMinimap2.mm_gen_MD(km, buf, max_len, idx, reg_ptr, seq)
+      generate_string(km, idx, reg_ptr, seq) do |allocator, buf, max_len, index, region, sequence|
+        LibMinimap2.mm_gen_MD(allocator, buf, max_len, index, region, sequence)
       end
     end
 
@@ -321,14 +321,14 @@ module Minimap2
     end
 
     private def gen_cs(km : Void*, idx : Pointer(LibMinimap2::MmIdxT), reg_ptr : Pointer(LibMinimap2::MmReg1T), seq : Bytes) : String
-      generate_string(km, idx, reg_ptr, seq) do |km, buf, max_len, idx, reg_ptr, seq|
-        LibMinimap2.mm_gen_cs(km, buf, max_len, idx, reg_ptr, seq, 1)
+      generate_string(km, idx, reg_ptr, seq) do |allocator, buf, max_len, index, region, sequence|
+        LibMinimap2.mm_gen_cs(allocator, buf, max_len, index, region, sequence, 1)
       end
     end
 
     private def gen_ds(km : Void*, idx : Pointer(LibMinimap2::MmIdxT), reg_ptr : Pointer(LibMinimap2::MmReg1T), seq : Bytes) : String
-      generate_string(km, idx, reg_ptr, seq) do |km, buf, max_len, idx, reg_ptr, seq|
-        LibMinimap2.mm_gen_ds(km, buf, max_len, idx, reg_ptr, seq, 1)
+      generate_string(km, idx, reg_ptr, seq) do |allocator, buf, max_len, index, region, sequence|
+        LibMinimap2.mm_gen_ds(allocator, buf, max_len, index, region, sequence, 1)
       end
     end
   end

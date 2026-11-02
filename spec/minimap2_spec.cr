@@ -2,8 +2,8 @@ require "./spec_helper"
 
 def load_fasta_sequence(path : String, max_len : Int32 = 200) : String
   seq = String.build do |io|
-    File.open(path) do |fh|
-      fh.each_line do |line|
+    File.open(path) do |file|
+      file.each_line do |line|
         next if line.empty? || line.starts_with?(">")
         chunk = line.strip
         io << chunk
@@ -28,12 +28,12 @@ describe Minimap2 do
     aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(ref_path)
 
     seq = load_fasta_sequence(ref_path, 100)
-    seq.empty?.should eq(false)
+    seq.empty?.should be_false
 
     mappings = aligner.map(seq, cs: false, md: false)
     mappings.should be_a(Array(Minimap2::Mapping))
     mappings.size.should be > 0
-    mappings[0].target_name.empty?.should eq(false)
+    mappings[0].target_name.empty?.should be_false
     mappings[0].mapq.should be <= 255_u32
   end
 
@@ -42,7 +42,7 @@ describe Minimap2 do
     aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(ref_path)
 
     seq = load_fasta_sequence(ref_path, 120)
-    seq.empty?.should eq(false)
+    seq.empty?.should be_false
 
     mappings = aligner.map(seq, cs: true, md: true)
     mappings.size.should be > 0
@@ -55,7 +55,7 @@ describe Minimap2 do
     aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(ref_path)
 
     seq = load_fasta_sequence(ref_path, 120)
-    seq.empty?.should eq(false)
+    seq.empty?.should be_false
 
     mappings = aligner.map(seq, ds: true)
     mappings.size.should be > 0

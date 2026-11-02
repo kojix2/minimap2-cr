@@ -23,21 +23,21 @@ module Minimap2
   #
   # Coordinates are 0-based, half-open (`start...stop`).
   def self.fetch_seq(idx : Pointer(LibMinimap2::MmIdxT), name : String, start : Int32 = 0, stop : Int32 = Int32::MAX) : String?
-    return nil if idx.null?
+    return if idx.null?
 
     rid = LibMinimap2.mm_idx_name2id(idx, name)
-    return nil if rid < 0
+    return if rid < 0
 
     seq_entry = idx.value.seq + rid
     seq_len = seq_entry.value.len.to_i
-    return nil if start >= seq_len || start >= stop
+    return if start >= seq_len || start >= stop
 
     en = stop
     en = seq_len if en < 0 || en > seq_len
 
     buf = Bytes.new(en - start)
     got = LibMinimap2.mm_idx_getseq(idx, rid.to_u32, start.to_u32, en.to_u32, buf.to_unsafe)
-    return nil if got <= 0
+    return if got <= 0
 
     decode_seq(buf, got)
   end
