@@ -21,19 +21,22 @@ module Minimap2
 
   # Fetch a subsequence from an index by contig name.
   #
-  # Coordinates are 0-based, half-open (`start...stop`).
+  # Coordinates are 0-based, half-open (`start...stop`). Returns `nil` for
+  # invalid ranges, missing contigs, or indexes without reference sequences.
   def self.fetch_seq(idx : Pointer(LibMinimap2::MmIdxT), name : String, start : Int32 = 0, stop : Int32 = Int32::MAX) : String?
     return if idx.null?
+    return if (idx.value.flag & LibMinimap2::IDX_NO_SEQ) != 0 || idx.value.s.null?
+    return if start < 0 || start >= stop
 
     rid = LibMinimap2.mm_idx_name2id(idx, name)
     return if rid < 0
 
     seq_entry = idx.value.seq + rid
     seq_len = seq_entry.value.len.to_i
-    return if start >= seq_len || start >= stop
+    return if start >= seq_len
 
     en = stop
-    en = seq_len if en < 0 || en > seq_len
+    en = seq_len if en > seq_len
 
     buf = Bytes.new(en - start)
     got = LibMinimap2.mm_idx_getseq(idx, rid.to_u32, start.to_u32, en.to_u32, buf.to_unsafe)

@@ -34,8 +34,10 @@ hits.each { |hit| puts "#{hit.target_name}:#{hit.target_start} MAPQ=#{hit.mapq}"
 ```
 
 Supply your own FASTA or minimap2 index. Coordinates are zero-based and half-open.
-`cs:`, `md:` and `ds:` request alignment tags. `aligner.seq(name, start, stop)`
-retrieves reference sequence; `Minimap2.revcomp(sequence)` reverse-complements it.
+`cs:`, `md:` and `ds:` request alignment tags.
+`aligner.seq(name, start, stop)` retrieves reference sequence, returning `nil`
+for invalid ranges, missing contigs, or indexes built with `--idx-no-seq`.
+`Minimap2.revcomp(sequence)` reverse-complements a sequence.
 For presets and detailed options, use [AlignerBuilder](src/minimap2/builder.cr).
 
 ## Development

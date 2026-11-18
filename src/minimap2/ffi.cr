@@ -7,6 +7,8 @@ module Minimap2
     @[Link(ldflags: "#{__DIR__}/../../ext/libminimap2.a -lm -lz -lpthread")]
   {% end %}
   lib LibMinimap2
+    IDX_NO_SEQ = 0x2
+
     NO_DIAG        =         0x001_i64
     NO_DUAL        =         0x002_i64
     CIGAR          =         0x004_i64

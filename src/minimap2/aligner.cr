@@ -67,29 +67,12 @@ module Minimap2
 
     # Fetch a reference subsequence by contig name.
     #
-    # Coordinates are 0-based, half-open (`start...stop`).
+    # Coordinates are 0-based, half-open (`start...stop`). Returns `nil` for
+    # invalid ranges, missing contigs, or indexes without reference sequences.
     def seq(name : String, start : Int32 = 0, stop : Int32 = Int32::MAX) : String?
-      return if @idx_parts.empty?
-
       @idx_parts.each do |idx|
-        next if idx.null?
-        next if (@map_opt.flag & 4_i64) == 0_i64 && (idx.value.flag & 2) == 0
-
-        rid = LibMinimap2.mm_idx_name2id(idx, name)
-        next if rid < 0
-
-        seq_entry = idx.value.seq + rid
-        seq_len = seq_entry.value.len.to_i
-        return if start >= seq_len || start >= stop
-
-        en = stop
-        en = seq_len if en < 0 || en > seq_len
-
-        buf = Bytes.new(en - start)
-        got = LibMinimap2.mm_idx_getseq(idx, rid.to_u32, start.to_u32, en.to_u32, buf.to_unsafe)
-        next if got <= 0
-
-        return decode_seq(buf, got)
+        sequence = Minimap2.fetch_seq(idx, name, start, stop)
+        return sequence if sequence
       end
 
       nil
@@ -187,6 +170,9 @@ module Minimap2
     end
 
     private def map_with_index(idx : Pointer(LibMinimap2::MmIdxT), seq : Bytes, mapopt : LibMinimap2::MmMapoptT, tbuf, qname_ptr : Pointer(LibC::Char), km : Void*, cs : Bool, md : Bool, ds : Bool) : Array(Mapping)
+      if (mapopt.flag & LibMinimap2::CIGAR) != 0 && ((idx.value.flag & LibMinimap2::IDX_NO_SEQ) != 0 || idx.value.s.null?)
+        raise ArgumentError.new("CIGAR and alignment tags require an index with reference sequences")
+      end
       n_regs = 0
       reg_ptr = LibMinimap2.mm_map(idx, seq.size, seq.to_unsafe.as(LibC::Char*), pointerof(n_regs), tbuf, pointerof(mapopt), qname_ptr)
       return [] of Mapping if reg_ptr.null? || n_regs == 0
@@ -279,15 +265,6 @@ module Minimap2
       String.build do |io|
         cigar.each do |(len, op)|
           io << len << self.class.cigar_op_char(op)
-        end
-      end
-    end
-
-    private def decode_seq(buf : Bytes, len : Int32) : String
-      bases = "ACGTN"
-      String.build do |io|
-        len.times do |i|
-          io << bases[buf[i].to_i]
         end
       end
     end
