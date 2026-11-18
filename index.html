@@ -135,6 +135,9 @@ hits.each { <span class="o">|</span>hit<span class="o">|</span> puts <span class
 <p>Supply your own FASTA or minimap2 index. Coordinates are zero-based and half-open.
 <code>cs:</code>, <code>md:</code> and <code>ds:</code> request alignment tags and enable CIGAR generation for
 that call. CIGAR and tags require an index containing reference sequences.
+<code>Mapping#nm</code> is the edit distance when base-level alignment is performed
+(<code>with_cigar</code>, <code>cigar: true</code>, or a tag request). Otherwise it is <code>nil</code>, rather
+than zero. Code that uses <code>nm</code> must handle this missing value.
 <code>aligner.seq(name, start, stop)</code> retrieves reference sequence, returning <code>nil</code>
 for invalid ranges, missing contigs, or indexes built with <code>--idx-no-seq</code>.
 <code>Minimap2.revcomp(sequence)</code> reverse-complements a sequence.
