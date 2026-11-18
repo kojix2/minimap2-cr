@@ -138,6 +138,9 @@ describe Minimap2 do
       aligner.seq("ref", 0, 5).should be_nil
       seq = load_fasta_sequence(ref_path)
       aligner.map(seq).should_not be_empty
+      expect_raises(ArgumentError, "require an index with reference sequences") do
+        aligner.map(seq, cs: true)
+      end
 
       cigar_aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(file.path)
       cigar_aligner.seq("ref", 0, 5).should be_nil
@@ -145,5 +148,47 @@ describe Minimap2 do
         cigar_aligner.map(seq)
       end
     end
+  end
+
+  {% for tag in %w(cs md ds) %}
+    it "generates {{tag.id}} without with_cigar and keeps default mapping options" do
+      ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
+      aligner = Minimap2::Aligner.build.map_ont.with_index(ref_path)
+      seq = load_fasta_sequence(ref_path)
+
+      mappings = aligner.map(seq, {{tag.id}}: true)
+      mappings.should_not be_empty
+      mappings.each do |mapping|
+        length = mapping.query_end - mapping.query_start
+        length.should be > 0
+        mapping.{{tag.id}}.should eq({{tag == "md" ? "" : ":"}} + length.to_s)
+        mapping.cigar_str.should eq("#{length}M")
+      end
+      aligner.map(seq).first.cigar.should be_empty
+    end
+  {% end %}
+
+  it "generates tags from unterminated byte slices on both strands" do
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
+    aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(ref_path)
+    seq = load_fasta_sequence(ref_path)
+    storage = Bytes.new(seq.bytesize + 16, 'A'.ord.to_u8)
+    storage[0, seq.bytesize].copy_from(seq.to_slice)
+    bytes = storage[0, seq.bytesize]
+    bytes.includes?(0_u8).should be_false
+    storage[seq.bytesize].should_not eq(0_u8)
+
+    mappings = aligner.map(bytes, cs: true, md: true, ds: true)
+    mappings.should_not be_empty
+    mappings.map(&.strand).uniq.size.should eq(2)
+    mappings.each do |mapping|
+      length = mapping.query_end - mapping.query_start
+      length.should be > 0
+      mapping.query_end.should be <= bytes.size
+      mapping.cs.should eq(":#{length}")
+      mapping.md.should eq(length.to_s)
+      mapping.ds.should eq(":#{length}")
+    end
+    bytes.should eq(seq.to_slice)
   end
 end

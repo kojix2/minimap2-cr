@@ -81,6 +81,7 @@ module Minimap2
     # Map a query string against the loaded index.
     #
     # Set `cs`, `md`, `ds` to include optional alignment tag strings.
+    # Requesting tags also enables CIGAR generation for this call.
     def map(seq : String, cs : Bool = false, md : Bool = false, ds : Bool = false, max_frag_len : Int32? = nil, extra_flags : Array(UInt64)? = nil, query_name : String? = nil) : Array(Mapping)
       map(seq.to_slice, cs, md, ds, max_frag_len, extra_flags, query_name)
     end
@@ -91,6 +92,12 @@ module Minimap2
     def map(seq : Bytes, cs : Bool = false, md : Bool = false, ds : Bool = false, max_frag_len : Int32? = nil, extra_flags : Array(UInt64)? = nil, query_name : String? = nil) : Array(Mapping)
       raise "Sequence is empty" if seq.empty?
       mapopt = prepare_mapopt(max_frag_len, extra_flags)
+      if cs || md || ds
+        mapopt.flag |= LibMinimap2::CIGAR
+        # Tag generators call strlen. Copy the slice into a NUL-terminated
+        # string while retaining its original length for mm_map.
+        seq = String.new(seq).to_slice
+      end
       qname_ptr = query_name ? query_name.to_unsafe : Pointer(LibC::Char).null
 
       with_thread_buffer do |tbuf|
