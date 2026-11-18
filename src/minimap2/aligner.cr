@@ -182,7 +182,7 @@ module Minimap2
       end
       n_regs = 0
       reg_ptr = LibMinimap2.mm_map(idx, seq.size, seq.to_unsafe.as(LibC::Char*), pointerof(n_regs), tbuf, pointerof(mapopt), qname_ptr)
-      return [] of Mapping if reg_ptr.null? || n_regs == 0
+      return [] of Mapping if reg_ptr.null?
 
       mappings = [] of Mapping
 

@@ -68,6 +68,18 @@ describe Minimap2 do
     aligner.n_seq.should be > 0_u32
   end
 
+  it "handles unmapped queries before mapping another sequence" do
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
+    [false, true].each do |cigar|
+      builder = Minimap2::Aligner.build.map_ont
+      builder.with_cigar if cigar
+      aligner = builder.with_index(ref_path)
+
+      aligner.map("N" * 100).should be_empty
+      aligner.map(load_fasta_sequence(ref_path)).should_not be_empty
+    end
+  end
+
   it "fetches reference sequences without requiring CIGAR generation" do
     ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
     aligner = Minimap2::Aligner.build.map_ont.with_index(ref_path)
