@@ -68,10 +68,24 @@ jobs:
         shell: msys2 {0}
         run: shards install
 
+      - name: Build native comparison command (non-Windows)
+        if: runner.os != 'Windows'
+        run: |
+          case "${{ runner.arch }}" in
+            ARM64) make -C ext/minimap2 aarch64=1 minimap2 ;;
+            *) make -C ext/minimap2 minimap2 ;;
+          esac
+
+      - name: Build native comparison command (Windows/MSYS2)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: mingw32-make -C ext/minimap2 minimap2
+
       - name: Run specs
         if: runner.os != 'Windows'
         env:
           LD_LIBRARY_PATH: ${{ github.workspace }}/ext
+          MINIMAP2_BIN: ./ext/minimap2/minimap2
         run: crystal spec
 
       - name: Build example command (non-Windows)
@@ -83,6 +97,8 @@ jobs:
       - name: Run specs (Windows/MSYS2)
         if: runner.os == 'Windows'
         shell: msys2 {0}
+        env:
+          MINIMAP2_BIN: ./ext/minimap2/minimap2.exe
         run: crystal spec
 
       - name: Build example command (Windows/MSYS2)

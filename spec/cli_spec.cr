@@ -8,20 +8,26 @@ private def cli(args : Array(String)) : Tuple(Int32, String, String)
   {status, output.to_s, error.to_s}
 end
 
-# Optional differential checks against the pinned native minimap2 executable.
-# MINIMAP2_BIN=./minimap2/minimap2 crystal spec
 if binary = ENV["MINIMAP2_BIN"]?
   describe "native minimap2 compatibility" do
-    %w[map-ont map-hifi sr splice asm5].each do |preset|
-      [false, true].each do |sam|
-        ["--cs", "--MD"].each do |tag|
-          it "matches #{preset} #{sam ? "SAM" : "PAF"} #{tag} fields and tags" do
+    %w[map-ont map-pb map-hifi sr splice splice:hq splice:sr asm5 asm10 asm20].each do |preset|
+      {"PAF" => [] of String, "PAF+CIGAR" => ["-c"], "SAM" => ["-a"]}.each do |format, format_args|
+        [[] of String, ["--cs"], ["--MD"], ["--eqx", "--MD"], ["--secondary=no"]].each do |extra_args|
+          # Native --MD requires -a/-c, while the Crystal API enables alignment.
+          next if format_args.empty? && extra_args.includes?("--MD")
+
+          it "matches #{preset} #{format} #{extra_args.join(" ")} fields and tags" do
+            sam = format == "SAM"
             with_cli_reference do |ref, query, reference|
               other = reference.reverse
-              File.write(ref, ">one\n#{reference}\n>two\n#{other}\n>duplicate\n#{reference}\n")
+              spliced = reference[0, 800] + "GT" + other[1000, 2000] + "AG" + reference[4500, 800]
+              File.write(ref, ">one\n#{reference}\n>two\n#{other}\n>duplicate\n#{reference}\n>spliced_ref\n#{spliced}\n")
               exact = reference[500, 1500]
               substitution = exact.to_slice.dup
               substitution[700] = substitution[700] == 'A'.ord ? 'C'.ord.to_u8 : 'A'.ord.to_u8
+              inversion = reference[500, 1500] + Minimap2.revcomp(reference[2000, 500]) + reference[2500, 1500]
+              ambiguous = exact[0, 700] + "NRYSWKMBDHV" + exact[711..]
+              transcript = reference[0, 800] + reference[4500, 800]
               reads = {
                 "exact"         => exact,
                 "reverse"       => Minimap2.revcomp(other[500, 1500]),
@@ -30,6 +36,15 @@ if binary = ENV["MINIMAP2_BIN"]?
                 "clipped"       => "N" * 101 + other[500, 1500] + "N" * 57,
                 "split"         => reference[500, 1500] + other[3000, 1500],
                 "split_reverse" => Minimap2.revcomp(reference[500, 1500] + other[3000, 1500]),
+                "inversion"     => inversion,
+                "inversion_rev" => Minimap2.revcomp(inversion),
+                "rna"           => exact.tr("T", "U"),
+                "rna_lower"     => exact.downcase.tr("t", "u"),
+                "rna_unmapped"  => "U" * 10,
+                "ambiguous"     => ambiguous,
+                "ambiguous_rev" => Minimap2.revcomp(ambiguous),
+                "spliced"       => transcript,
+                "spliced_rev"   => Minimap2.revcomp(transcript),
                 "unmapped"      => "N" * 500,
               }
               File.open(query, "w") do |file|
@@ -38,23 +53,28 @@ if binary = ENV["MINIMAP2_BIN"]?
                   file.puts "@#{name}\n#{sequence}\n+\n#{quality}"
                 end
               end
-              args = ["-x", preset, sam ? "-a" : "-c", tag, ref, query]
+              args = ["-x", preset] + format_args + extra_args + [ref, query]
               native = IO::Memory.new
               native_error = IO::Memory.new
               Process.run(binary, args, output: native, error: native_error).success?.should be_true
               status, output, error = cli(args)
               status.should eq(0)
               error.should be_empty
-              # Auxiliary tags such as AS, SA, and cm are outside this example's scope.
               normalize = ->(text : String) do
                 text.lines.reject { |line| sam && line.starts_with?('@') }.map do |line|
                   fields = line.split('\t')
                   size = sam ? 11 : 12
-                  tags = fields[size..].select { |field| %w[NM cs MD cg].includes?(field.split(':').first) }
-                  fields[0, size] + tags.sort
+                  supported_tags = sam ? %w[NM cs MD cg] : %w[NM cs MD cg tp]
+                  tags = fields[size..].select { |field| supported_tags.includes?(field.split(':').first) }
+                  (fields[0, size] + tags.sort).join('\t')
                 end
               end
-              normalize.call(output).should eq(normalize.call(native.to_s))
+              expected = normalize.call(native.to_s)
+              actual = normalize.call(output)
+              actual.size.should eq(expected.size)
+              actual.zip(expected).each do |actual_record, expected_record|
+                actual_record.should eq(expected_record)
+              end
             end
           end
         end

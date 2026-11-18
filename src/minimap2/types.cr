@@ -27,7 +27,8 @@ module Minimap2
     getter match_len : Int32
     getter block_len : Int32
     getter mapq : UInt32
-    # Preserve the existing public accessor name for compatibility.
+    # The representative non-secondary record for this query in an index part,
+    # including mappings produced without CIGAR.
     getter is_primary : Bool # ameba:disable Naming/QueryBoolMethods
     getter cigar : Array(Tuple(UInt32, UInt8))
     getter cigar_str : String
@@ -37,7 +38,6 @@ module Minimap2
     getter cs : String?
     getter ds : String?
     getter? secondary : Bool
-    # Whether minimap2 marked this as an inversion alignment.
     getter? inversion : Bool
 
     def supplementary? : Bool

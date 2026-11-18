@@ -26,6 +26,10 @@ Wrapped FASTQ records are not supported by fastx.cr; normalize them to four-line
 records before running this example.
 PAF omits unmapped reads; SAM includes them. `--secondary=no` suppresses secondary
 hits while retaining supplementary alignments. Use `--help` for supported options.
+Like native minimap2, the example normalizes RNA `U/u` to DNA `T/t` before
+mapping and SAM output. `-o -` explicitly selects standard output. Tag requests
+enable alignment, matching the Crystal API; native minimap2 needs `-a` or `-c`
+alongside `--MD` for MD output.
 
 Reads are mapped independently and serially; `-t` controls index construction
 only. Paired-end mapping, mapping against multi-part indexes, long cs tags, and
@@ -42,11 +46,15 @@ compatibility specs (the reference clone used here is minimap2 v2.31):
 MINIMAP2_BIN=./minimap2/minimap2 crystal spec
 ```
 
-These compare five presets (`map-ont`, `map-hifi`, `sr`, `splice`, `asm5`) in both
-PAF and SAM, with cs and MD checked individually. They exercise exact matches,
-substitutions, insertions/deletions, reverse strands, clipping, split alignments,
+The 130 comparisons cover ten presets (`map-ont`, `map-pb`, `map-hifi`, `sr`,
+`splice`, `splice:hq`, `splice:sr`, `asm5`, `asm10`, `asm20`), plain PAF, PAF with
+CIGAR, and SAM. They check default output, cs, MD, `--eqx`, and secondary-hit
+filtering for option combinations shared with native minimap2. Inputs include
+exact matches, substitutions, insertions/deletions, reverse strands, clipping,
+split alignments, inversions, RNA, IUPAC ambiguity codes, spliced transcripts,
 secondary hits, and unmapped reads. Comparison covers mandatory fields and the
-supported NM/cg/cs/MD tags, rather than minimap2's complete auxiliary tag set.
+supported NM/cg/cs/MD tags plus PAF tp, rather than the complete auxiliary tag set.
+CI builds the pinned native executable and runs these comparisons on each OS.
 
 ## Verified fixes
 
@@ -66,3 +74,18 @@ Local validation on macOS also checked SAM conversion with `samtools view`, plai
 stdin, gzip query files, `--eqx`, and MMI exchange in both directions with native
 minimap2. These checks establish the tested behaviors; they do not claim parity
 for every minimap2 feature or preset.
+
+### Additional fixes from native comparison
+
+The following issues were reproduced against `380ee40`. All four new regression
+specs fail before the fixes and pass afterward.
+
+| Bug | Evidence before the fix | Correction |
+| --- | --- | --- |
+| Primary mappings misclassified without CIGAR | A unique exact match had `is_primary=false` and `supplementary?=true`. Native `mm_map` can leave `sam_pri` unset in this mode. | Choose the first non-secondary record, following native `mm_set_sam_pri`, regardless of CIGAR generation. |
+| Inversion type lost in PAF | A recovered 500-base inversion was printed as `tp:A:P` instead of native `tp:A:I`. | Preserve the native inversion bit in `Mapping#inversion?` and emit I/i for inversion records. |
+| RNA SAM sequences differed from native output | Uppercase and lowercase U remained in forward-strand SAM SEQ; native `kseq2bseq` converts them to T/t. | Normalize RNA bases in the CLI input adapter for FASTA and FASTQ, including unmapped records. |
+| Explicit stdout output rejected | `-o -` exited with status 1 instead of writing the same mappings as default stdout. | Treat `-o -` as standard output, as native minimap2 does. |
+
+On macOS, 172 specs passed, including the 130 comparisons above. Ameba inspected
+15 project files with zero findings; format and whitespace checks also passed.

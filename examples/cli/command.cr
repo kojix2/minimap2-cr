@@ -70,7 +70,7 @@ module Minimap2
         parser.on("-a", "Output SAM (default: PAF)") { @sam = true }
         parser.on("-c", "Include CIGAR in PAF") { @cigar = true }
         parser.on("--cs", "Include short cs tags") { @cs = true }
-        parser.on("--MD", "Include MD tags") { @md = true }
+        parser.on("--MD", "Include MD tags (implies alignment)") { @md = true }
         parser.on("--eqx", "Use =/X CIGAR operations (implies alignment)") { @eqx = true }
         parser.on("--secondary=BOOL", "Print secondary hits: yes or no [preset default]") do |value|
           raise ArgumentError.new("--secondary must be yes or no") unless {"yes", "no"}.includes?(value)
