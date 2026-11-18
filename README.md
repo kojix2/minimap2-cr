@@ -10,7 +10,7 @@ Build/load reference indexes and map sequences with coordinates, MAPQ and CIGAR.
 
 Requires a C compiler, make, curl, tar, bzip2 and zlib development headers.
 On Ubuntu: `sudo apt-get install build-essential curl bzip2 zlib1g-dev`.
-On macOS, install Xcode Command Line Tools. Windows requires MinGW/MSYS2 with
+On macOS, install Xcode Command Line Tools. Windows requires MSYS2 UCRT64 with
 `MAKE=mingw32-make`; see [CI setup](.github/workflows/test.yml) for packages.
 
 ```yaml
