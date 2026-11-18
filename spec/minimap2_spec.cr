@@ -191,4 +191,19 @@ describe Minimap2 do
     end
     bytes.should eq(seq.to_slice)
   end
+
+  it "rejects invalid presets and preserves the builder's previous options" do
+    builder = Minimap2::Aligner.build.map_ont
+    expect_raises(ArgumentError, "Unknown minimap2 preset: not-a-preset") do
+      builder.preset("not-a-preset")
+    end
+    # minimap2 changes some options before rejecting an unknown asm preset.
+    expect_raises(ArgumentError, "Unknown minimap2 preset: asm-invalid") do
+      builder.preset("asm-invalid")
+    end
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
+    aligner = builder.with_index(ref_path)
+    aligner.idx_opt.k.should eq(15)
+    (aligner.map_opt.flag & Minimap2::LibMinimap2::RMQ).should eq(0)
+  end
 end

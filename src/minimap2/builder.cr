@@ -28,9 +28,16 @@ module Minimap2
     end
 
     # Apply a minimap2 preset string (e.g. "map-ont", "map-hifi", "splice").
+    # Raises `ArgumentError` for an unknown preset, preserving current options.
     def preset(preset : String) : self
       c_preset = preset.to_unsafe
-      LibMinimap2.mm_set_opt(c_preset, pointerof(@idxopt), pointerof(@mapopt))
+      idxopt = @idxopt
+      mapopt = @mapopt
+      if LibMinimap2.mm_set_opt(c_preset, pointerof(idxopt), pointerof(mapopt)) < 0
+        raise ArgumentError.new("Unknown minimap2 preset: #{preset}")
+      end
+      @idxopt = idxopt
+      @mapopt = mapopt
       self
     end
 
