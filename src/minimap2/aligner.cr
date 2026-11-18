@@ -152,11 +152,21 @@ module Minimap2
     end
 
     private def open_index_reader(path : String, output : String?)
+      validate_index_output(path, output) if output
       c_path = path.to_unsafe
       c_output = output ? output.to_unsafe : Pointer(LibC::Char).null
       reader = LibMinimap2.mm_idx_reader_open(c_path, pointerof(@idx_opt), c_output)
       raise "Failed to open index or reference" if reader.null?
       reader
+    end
+
+    private def validate_index_output(path : String, output : String)
+      if File.expand_path(path) == File.expand_path(output) || (File.exists?(path) && File.exists?(output) && File.same?(path, output))
+        raise ArgumentError.new("Index output would overwrite the reference: #{output}")
+      end
+      # The native reader does not report a failed fopen(fn_out, "wb").
+      # Check writability without truncating an existing file before it opens.
+      File.open(output, "a") { }
     end
 
     private def load_indices(reader)

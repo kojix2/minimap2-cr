@@ -48,6 +48,25 @@ describe Minimap2 do
     Minimap2::LibMinimap2.mm_set_opt(preset, pointerof(idxopt), pointerof(mapopt)).should eq(0)
   end
 
+  it "reports index output failures instead of silently succeeding" do
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
+    expect_raises(File::Error) do
+      Minimap2::Aligner.new(ref_path, output: File.join(ref_path, "missing.mmi"))
+    end
+  end
+
+  it "rejects index output that would truncate the reference" do
+    original = ">ref\n#{"ACGT" * 100}\n"
+    File.tempfile("minimap2-index-output", ".fa") do |file|
+      file << original
+      file.flush
+      expect_raises(ArgumentError, "Index output would overwrite the reference") do
+        Minimap2::Aligner.new(file.path, output: file.path)
+      end
+      File.read(file.path).should eq(original)
+    end
+  end
+
   it "builds an index and maps a sequence" do
     ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
     aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(ref_path)
