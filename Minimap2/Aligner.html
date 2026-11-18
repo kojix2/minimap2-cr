@@ -149,7 +149,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L3" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L3" target="_blank">
         minimap2/aligner.cr
       </a>
     
@@ -252,6 +252,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#index_parts%3AInt32-instance-method" class="signature"><strong>#index_parts</strong> : Int32</a>
+        
+          <div class="summary"><p>Number of loaded index parts.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#map%28seq%3AString%2Ccs%3ABool%3Dfalse%2Cmd%3ABool%3Dfalse%2Cds%3ABool%3Dfalse%2Cmax_frag_len%3AInt32%7CNil%3Dnil%2Cextra_flags%3AArray%28UInt64%29%7CNil%3Dnil%2Cquery_name%3AString%7CNil%3Dnil%29%3AArray%28Mapping%29-instance-method" class="signature"><strong>#map</strong>(seq : String, cs : Bool = <span class="n">false</span>, md : Bool = <span class="n">false</span>, ds : Bool = <span class="n">false</span>, max_frag_len : Int32 | Nil = <span class="n">nil</span>, extra_flags : Array(UInt64) | Nil = <span class="n">nil</span>, query_name : String | Nil = <span class="n">nil</span>) : Array(Mapping)</a>
         
           <div class="summary"><p>Map a query string against the loaded index.</p></div>
@@ -274,6 +281,13 @@
         <a href="#n_seq%3AUInt32-instance-method" class="signature"><strong>#n_seq</strong> : UInt32</a>
         
           <div class="summary"><p>Number of reference sequences in the first loaded index part.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#references%3AArray%28Tuple%28String%2CInt32%29%29-instance-method" class="signature"><strong>#references</strong> : Array(Tuple(String, Int32))</a>
+        
+          <div class="summary"><p>Reference names and lengths, in index order (for SAM sequence headers).</p></div>
         
       </li>
     
@@ -345,7 +359,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -367,7 +381,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -383,7 +397,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -416,7 +430,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -437,7 +451,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -453,7 +467,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L124" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L139" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -489,7 +503,7 @@ Repeated calls are harmless after the index parts have been cleared.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L117" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L132" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -505,7 +519,28 @@ Repeated calls are harmless after the index parts have been cleared.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="index_parts:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>index_parts</strong> : Int32
+
+        <a class="method-permalink" href="#index_parts%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Number of loaded index parts. Mapping results are combined per part.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -528,7 +563,7 @@ Requesting tags also enables CIGAR generation for this call.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L85" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -550,7 +585,7 @@ Requesting tags also enables CIGAR generation for this call.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L92" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L107" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -566,7 +601,7 @@ Requesting tags also enables CIGAR generation for this call.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -587,7 +622,28 @@ Requesting tags also enables CIGAR generation for this call.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L63" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L63" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="references:Array(Tuple(String,Int32))-instance-method">
+      <div class="signature">
+        
+        def <strong>references</strong> : Array(Tuple(String, Int32))
+
+        <a class="method-permalink" href="#references%3AArray%28Tuple%28String%2CInt32%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Reference names and lengths, in index order (for SAM sequence headers).</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L74" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -610,7 +666,7 @@ invalid ranges, missing contigs, or indexes without reference sequences.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/0e0b05599248225dd4f41e7e9754fd69f6fe8d6f/src/minimap2/aligner.cr#L72" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/96a1d956b85114f39e6f31aaa920793de3a5d19d/src/minimap2/aligner.cr#L87" target="_blank">View source</a>]
         
       </div>
     </div>

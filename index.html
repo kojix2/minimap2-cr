@@ -147,6 +147,32 @@ For presets and detailed options, use <a href="src/minimap2/builder.cr">AlignerB
     <use href="#octicon-link"/>
   </svg>
 </a>Development</h2>
+<h3><a id="example-command" class="anchor" href="#example-command">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Example command</h3>
+<pre><code class="language-sh">crystal build examples/minimap2-cr.cr -o bin/minimap2-cr
+bin/minimap2-cr -x map-ont reference.fa reads.fq.gz &gt; mappings.paf
+bin/minimap2-cr -ax map-ont --MD reference.fa reads.fq &gt; mappings.sam
+bin/minimap2-cr -d reference.mmi reference.fa
+bin/minimap2-cr -c --cs reference.mmi reads.fa -o mappings.paf
+cat reads.fq | bin/minimap2-cr -a reference.mmi -</code></pre>
+<p>This small example uses the Crystal API. It accepts multiline FASTA/FASTQ,
+gzip-compressed query files (detected by their contents), multiple query files,
+and plain FASTA/FASTQ on standard input. Reference input is handled by minimap2.
+PAF omits unmapped reads; SAM includes them. <code>--secondary=no</code> suppresses secondary
+hits while retaining supplementary alignments. Use <code>--help</code> for supported options.</p>
+<p>Reads are mapped independently and serially; <code>-t</code> controls index construction
+only. Paired-end mapping, mapping against multi-part indexes, long cs tags, and
+the complete set of minimap2 options and auxiliary SAM/PAF tags are not included.
+All index parts are held in memory. MMI files are compatible with the pinned
+native minimap2 version. SAM includes NM and optionally cs/MD tags, but no SA tag.</p>
+<h3><a id="checks" class="anchor" href="#checks">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Checks</h3>
 <pre><code class="language-sh">shards install
 crystal spec</code></pre>
 <p>To rebuild native code in a local checkout: <code>crystal run ext/build.cr</code>.
