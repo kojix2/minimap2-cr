@@ -49,6 +49,7 @@ For presets and detailed options, use [AlignerBuilder](src/minimap2/builder.cr).
 ### Example command
 
 ```sh
+shards install
 mkdir -p bin
 crystal build examples/minimap2-cr.cr -o bin/minimap2-cr
 bin/minimap2-cr -x map-ont reference.fa reads.fq.gz > mappings.paf
@@ -58,9 +59,14 @@ bin/minimap2-cr -c --cs reference.mmi reads.fa -o mappings.paf
 cat reads.fq | bin/minimap2-cr -a reference.mmi -
 ```
 
-This small example uses the Crystal API. It accepts multiline FASTA/FASTQ,
+This small example uses the Crystal API and
+[fastx.cr](https://github.com/bio-cr/fastx.cr) for FASTA/FASTQ parsing. The latter
+is a development dependency used by the example and specs. It accepts multiline
+FASTA and conventional four-line FASTQ,
 gzip-compressed query files (detected by their contents), multiple query files,
 and plain FASTA/FASTQ on standard input. Reference input is handled by minimap2.
+Wrapped FASTQ records are not supported by fastx.cr; normalize them to four-line
+records before running this example.
 PAF omits unmapped reads; SAM includes them. `--secondary=no` suppresses secondary
 hits while retaining supplementary alignments. Use `--help` for supported options.
 

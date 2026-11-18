@@ -78,14 +78,26 @@ private def with_cli_reference(& : String, String, String ->)
 end
 
 describe Minimap2Example::Fastx do
-  it "reads multiline FASTA and FASTQ with comments, CRLF and header-like quality" do
+  it "reads multiline FASTA with comments and CRLF" do
     reads = [] of Minimap2Example::Read
-    input = IO::Memory.new("\n>one comment\r\nAC\r\nGT\r\n@two comment\nAC\nGT\n+two\n@@\n>>\n")
+    input = IO::Memory.new("\n>one comment\r\nAC\r\nGT\r\n>two comment\r\nTGCA\r\n")
     Minimap2Example::Fastx.each_io(input) { |read| reads << read }
     reads.should eq([
       Minimap2Example::Read.new("one", "ACGT"),
-      Minimap2Example::Read.new("two", "ACGT", "@@>>"),
+      Minimap2Example::Read.new("two", "TGCA"),
     ])
+    input.closed?.should be_false
+  end
+
+  it "reads four-line FASTQ with comments, CRLF and header-like quality" do
+    reads = [] of Minimap2Example::Read
+    input = IO::Memory.new("\n@one comment\r\nACGT\r\n+one\r\n@@>>\r\n@two\r\nTGCA\r\n+\r\n!!!!\r\n")
+    Minimap2Example::Fastx.each_io(input) { |read| reads << read }
+    reads.should eq([
+      Minimap2Example::Read.new("one", "ACGT", "@@>>"),
+      Minimap2Example::Read.new("two", "TGCA", "!!!!"),
+    ])
+    input.closed?.should be_false
   end
 
   it "reads gzip input by magic bytes rather than filename suffix" do
@@ -99,16 +111,29 @@ describe Minimap2Example::Fastx do
   end
 
   it "rejects malformed headers, missing separators and incorrect quality lengths" do
-    ["ACGT\n", ">\nACGT\n", "@read\nACGT\n", "@read\nACGT\n+\n!!\n", "@read\nACGT\n+\n!!!!!\n"].each do |text|
+    ["ACGT\n", ">\nACGT\n", "@\nACGT\n+\n!!!!\n"].each do |text|
       expect_raises(ArgumentError) do
+        Minimap2Example::Fastx.each_io(IO::Memory.new(text)) { |_| }
+      end
+    end
+    ["@read\nACGT\n", "@read\nACGT\n+\n!!\n", "@read\nACGT\n+\n!!!!!\n"].each do |text|
+      expect_raises(::Fastx::InvalidFormatError) do
         Minimap2Example::Fastx.each_io(IO::Memory.new(text)) { |_| }
       end
     end
   end
 
+  it "reports wrapped FASTQ as unsupported by fastx.cr" do
+    expect_raises(::Fastx::InvalidFormatError) do
+      Minimap2Example::Fastx.each_io(IO::Memory.new("@read\nAC\nGT\n+\n!!\n!!\n")) { |_| }
+    end
+  end
+
   it "preserves empty FASTA and FASTQ records" do
     reads = [] of Minimap2Example::Read
-    Minimap2Example::Fastx.each_io(IO::Memory.new(">empty\n@empty2\n\n+\n\n")) { |read| reads << read }
+    [">empty\n", "@empty2\n\n+\n\n"].each do |text|
+      Minimap2Example::Fastx.each_io(IO::Memory.new(text)) { |read| reads << read }
+    end
     reads.map(&.sequence).should eq(["", ""])
   end
 end
