@@ -152,16 +152,22 @@ For presets and detailed options, use <a href="src/minimap2/builder.cr">AlignerB
     <use href="#octicon-link"/>
   </svg>
 </a>Example command</h3>
-<pre><code class="language-sh">mkdir -p bin
+<pre><code class="language-sh">shards install
+mkdir -p bin
 crystal build examples/minimap2-cr.cr -o bin/minimap2-cr
 bin/minimap2-cr -x map-ont reference.fa reads.fq.gz &gt; mappings.paf
 bin/minimap2-cr -ax map-ont --MD reference.fa reads.fq &gt; mappings.sam
 bin/minimap2-cr -d reference.mmi reference.fa
 bin/minimap2-cr -c --cs reference.mmi reads.fa -o mappings.paf
 cat reads.fq | bin/minimap2-cr -a reference.mmi -</code></pre>
-<p>This small example uses the Crystal API. It accepts multiline FASTA/FASTQ,
+<p>This small example uses the Crystal API and
+<a href="https://github.com/bio-cr/fastx.cr">fastx.cr</a> for FASTA/FASTQ parsing. The latter
+is a development dependency used by the example and specs. It accepts multiline
+FASTA and conventional four-line FASTQ,
 gzip-compressed query files (detected by their contents), multiple query files,
 and plain FASTA/FASTQ on standard input. Reference input is handled by minimap2.
+Wrapped FASTQ records are not supported by fastx.cr; normalize them to four-line
+records before running this example.
 PAF omits unmapped reads; SAM includes them. <code>--secondary=no</code> suppresses secondary
 hits while retaining supplementary alignments. Use <code>--help</code> for supported options.</p>
 <p>Reads are mapped independently and serially; <code>-t</code> controls index construction
