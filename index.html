@@ -133,8 +133,11 @@ aligner <span class="o">=</span> <span class="t">Minimap2</span><span class="t">
 hits <span class="o">=</span> aligner.map(<span class="s">&quot;ACGTACGTACGT&quot;</span>, cs: <span class="n">true</span>, md: <span class="n">true</span>)
 hits.each { <span class="o">|</span>hit<span class="o">|</span> puts <span class="s">&quot;</span><span class="i">#{</span>hit.target_name<span class="i">}</span><span class="s">:</span><span class="i">#{</span>hit.target_start<span class="i">}</span><span class="s"> MAPQ=</span><span class="i">#{</span>hit.mapq<span class="i">}</span><span class="s">&quot;</span> }</code></pre>
 <p>Supply your own FASTA or minimap2 index. Coordinates are zero-based and half-open.
-<code>cs:</code>, <code>md:</code> and <code>ds:</code> request alignment tags. <code>aligner.seq(name, start, stop)</code>
-retrieves reference sequence; <code>Minimap2.revcomp(sequence)</code> reverse-complements it.
+<code>cs:</code>, <code>md:</code> and <code>ds:</code> request alignment tags and enable CIGAR generation for
+that call. CIGAR and tags require an index containing reference sequences.
+<code>aligner.seq(name, start, stop)</code> retrieves reference sequence, returning <code>nil</code>
+for invalid ranges, missing contigs, or indexes built with <code>--idx-no-seq</code>.
+<code>Minimap2.revcomp(sequence)</code> reverse-complements a sequence.
 For presets and detailed options, use <a href="src/minimap2/builder.cr">AlignerBuilder</a>.</p>
 <h2><a id="development" class="anchor" href="#development">
   <svg class="octicon-link" aria-hidden="true">
