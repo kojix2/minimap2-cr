@@ -1,3 +1,3 @@
-require "./minimap2_cli/cli"
+require "./cli/command"
 
-exit Minimap2Example::CLI.run(ARGV)
+exit Minimap2::CLI.run(ARGV)

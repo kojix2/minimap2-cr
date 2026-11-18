@@ -1,7 +1,7 @@
 require "option_parser"
-require "./formatter"
+require "./output"
 
-module Minimap2Example
+module Minimap2
   class CLI
     @preset : String? = nil
     @sam = false
@@ -24,7 +24,7 @@ module Minimap2Example
       parser = options
       parser.parse(args)
       if @help || @version
-        output.puts(@version ? Minimap2::VERSION : parser)
+        output.puts(@version ? VERSION : parser)
         return 0
       end
       validate_inputs(args)
@@ -54,8 +54,8 @@ module Minimap2Example
       raise ArgumentError.new("Standard input can only be used once") if args.count("-") > 1
     end
 
-    private def build_aligner(reference : String) : Minimap2::Aligner
-      builder = Minimap2::Aligner.build.with_index_threads(@threads)
+    private def build_aligner(reference : String) : Aligner
+      builder = Aligner.build.with_index_threads(@threads)
       if preset = @preset
         builder.preset(preset)
       end
@@ -97,23 +97,23 @@ module Minimap2Example
       end
     end
 
-    private def map(aligner : Minimap2::Aligner, paths : Array(String), output : IO)
-      Formatter.sam_header(output, aligner.references) if @sam
-      flags = @eqx ? [Minimap2::LibMinimap2::EQX.to_u64] : nil
+    private def map(aligner : Aligner, paths : Array(String), output : IO)
+      Output.sam_header(output, aligner.references) if @sam
+      flags = @eqx ? [LibMinimap2::EQX.to_u64] : nil
       secondary = @secondary
-      secondary = (aligner.map_opt.flag & Minimap2::LibMinimap2::NO_PRINT_2ND) == 0 if secondary.nil?
+      secondary = (aligner.map_opt.flag & LibMinimap2::NO_PRINT_2ND) == 0 if secondary.nil?
       paths.each do |path|
-        Fastx.each(path) do |read|
-          hits = read.sequence.empty? ? [] of Minimap2::Mapping : aligner.map(read.sequence, cs: @cs, md: @md, extra_flags: flags, query_name: read.name)
+        Reads.each(path) do |read|
+          hits = read.sequence.empty? ? [] of Mapping : aligner.map(read.sequence, cs: @cs, md: @md, extra_flags: flags, query_name: read.name)
           hits.reject!(&.secondary?) unless secondary
           if @sam
             if hits.empty?
-              Formatter.sam(output, read, nil)
+              Output.sam(output, read, nil)
             else
-              hits.each { |hit| Formatter.sam(output, read, hit) }
+              hits.each { |hit| Output.sam(output, read, hit) }
             end
           else
-            hits.each { |hit| Formatter.paf(output, read, hit, @cigar) }
+            hits.each { |hit| Output.paf(output, read, hit, @cigar) }
           end
         end
       end

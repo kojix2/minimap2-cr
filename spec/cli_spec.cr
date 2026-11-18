@@ -1,10 +1,10 @@
 require "./spec_helper"
-require "../examples/minimap2_cli/cli"
+require "../examples/cli/command"
 
 private def cli(args : Array(String)) : Tuple(Int32, String, String)
   output = IO::Memory.new
   error = IO::Memory.new
-  status = Minimap2Example::CLI.run(args, output, error)
+  status = Minimap2::CLI.run(args, output, error)
   {status, output.to_s, error.to_s}
 end
 
@@ -77,25 +77,25 @@ private def with_cli_reference(& : String, String, String ->)
   end
 end
 
-describe Minimap2Example::Fastx do
+describe Minimap2::CLI::Reads do
   it "reads multiline FASTA with comments and CRLF" do
-    reads = [] of Minimap2Example::Read
+    reads = [] of Minimap2::CLI::Read
     input = IO::Memory.new("\n>one comment\r\nAC\r\nGT\r\n>two comment\r\nTGCA\r\n")
-    Minimap2Example::Fastx.each_io(input) { |read| reads << read }
+    Minimap2::CLI::Reads.each_io(input) { |read| reads << read }
     reads.should eq([
-      Minimap2Example::Read.new("one", "ACGT"),
-      Minimap2Example::Read.new("two", "TGCA"),
+      Minimap2::CLI::Read.new("one", "ACGT"),
+      Minimap2::CLI::Read.new("two", "TGCA"),
     ])
     input.closed?.should be_false
   end
 
   it "reads four-line FASTQ with comments, CRLF and header-like quality" do
-    reads = [] of Minimap2Example::Read
+    reads = [] of Minimap2::CLI::Read
     input = IO::Memory.new("\n@one comment\r\nACGT\r\n+one\r\n@@>>\r\n@two\r\nTGCA\r\n+\r\n!!!!\r\n")
-    Minimap2Example::Fastx.each_io(input) { |read| reads << read }
+    Minimap2::CLI::Reads.each_io(input) { |read| reads << read }
     reads.should eq([
-      Minimap2Example::Read.new("one", "ACGT", "@@>>"),
-      Minimap2Example::Read.new("two", "TGCA", "!!!!"),
+      Minimap2::CLI::Read.new("one", "ACGT", "@@>>"),
+      Minimap2::CLI::Read.new("two", "TGCA", "!!!!"),
     ])
     input.closed?.should be_false
   end
@@ -104,41 +104,41 @@ describe Minimap2Example::Fastx do
     File.tempfile("minimap2-fastx", ".data") do |file|
       Compress::Gzip::Writer.open(file) { |gzip| gzip << ">gzip\nACGT\n" }
       file.flush
-      reads = [] of Minimap2Example::Read
-      Minimap2Example::Fastx.each(file.path) { |read| reads << read }
-      reads.should eq([Minimap2Example::Read.new("gzip", "ACGT")])
+      reads = [] of Minimap2::CLI::Read
+      Minimap2::CLI::Reads.each(file.path) { |read| reads << read }
+      reads.should eq([Minimap2::CLI::Read.new("gzip", "ACGT")])
     end
   end
 
   it "rejects malformed headers, missing separators and incorrect quality lengths" do
     ["ACGT\n", ">\nACGT\n", "@\nACGT\n+\n!!!!\n"].each do |text|
       expect_raises(ArgumentError) do
-        Minimap2Example::Fastx.each_io(IO::Memory.new(text)) { |_| }
+        Minimap2::CLI::Reads.each_io(IO::Memory.new(text)) { |_| }
       end
     end
     ["@read\nACGT\n", "@read\nACGT\n+\n!!\n", "@read\nACGT\n+\n!!!!!\n"].each do |text|
       expect_raises(::Fastx::InvalidFormatError) do
-        Minimap2Example::Fastx.each_io(IO::Memory.new(text)) { |_| }
+        Minimap2::CLI::Reads.each_io(IO::Memory.new(text)) { |_| }
       end
     end
   end
 
   it "reports wrapped FASTQ as unsupported by fastx.cr" do
     expect_raises(::Fastx::InvalidFormatError) do
-      Minimap2Example::Fastx.each_io(IO::Memory.new("@read\nAC\nGT\n+\n!!\n!!\n")) { |_| }
+      Minimap2::CLI::Reads.each_io(IO::Memory.new("@read\nAC\nGT\n+\n!!\n!!\n")) { |_| }
     end
   end
 
   it "preserves empty FASTA and FASTQ records" do
-    reads = [] of Minimap2Example::Read
+    reads = [] of Minimap2::CLI::Read
     [">empty\n", "@empty2\n\n+\n\n"].each do |text|
-      Minimap2Example::Fastx.each_io(IO::Memory.new(text)) { |read| reads << read }
+      Minimap2::CLI::Reads.each_io(IO::Memory.new(text)) { |read| reads << read }
     end
     reads.map(&.sequence).should eq(["", ""])
   end
 end
 
-describe Minimap2Example::CLI do
+describe Minimap2::CLI do
   it "shows help/version and reports invalid options or missing arguments" do
     cli(["--help"])[1].should contain("Usage: minimap2-cr")
     cli(["--version"])[1].strip.should eq(Minimap2::VERSION)
