@@ -112,11 +112,13 @@ module Minimap2
       end
     end
 
-    # Release loaded minimap2 index parts.
+    # GC finalizer that releases loaded minimap2 index parts.
+    # Repeated calls are harmless after the index parts have been cleared.
     def finalize
       @idx_parts.each do |idx|
         LibMinimap2.mm_idx_destroy(idx)
       end
+      @idx_parts.clear
     end
 
     def self.cigar_op_char(op : UInt8) : Char

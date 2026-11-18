@@ -79,6 +79,29 @@ describe Minimap2 do
     aligner.n_seq.should be > 0_u32
   end
 
+  it "clears index parts on finalization and tolerates repeated calls" do
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
+    aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(ref_path)
+    seq = load_fasta_sequence(ref_path)
+    mappings = aligner.map(seq, cs: true, md: true, ds: true)
+    mappings.should_not be_empty
+
+    aligner.finalize
+    aligner.n_seq.should eq(0_u32)
+    aligner.seq("ref").should be_nil
+    aligner.map(seq).should be_empty
+    aligner.map(seq, cs: true, md: true, ds: true).should be_empty
+
+    aligner.finalize
+    aligner.n_seq.should eq(0_u32)
+    # Mapping records own their data independently of the released index.
+    mappings.first.target_name.should eq("ref")
+    mappings.first.cigar.should_not be_empty
+    mappings.first.cs.should_not be_nil
+    mappings.first.md.should_not be_nil
+    mappings.first.ds.should_not be_nil
+  end
+
   it "handles unmapped queries before mapping another sequence" do
     ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
     [false, true].each do |cigar|
