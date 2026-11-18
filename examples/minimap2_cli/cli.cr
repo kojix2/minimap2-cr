@@ -9,7 +9,7 @@ module Minimap2Example
     @cs = false
     @md = false
     @eqx = false
-    @secondary = true
+    @secondary : Bool? = nil
     @threads = 1
     @dump : String? = nil
     @output : String? = nil
@@ -60,10 +60,6 @@ module Minimap2Example
         builder.preset(preset)
       end
       builder.with_cigar if @sam || @cigar || @eqx
-      # The native index reader silently ignores fopen failures for output.
-      if dump = @dump
-        File.open(dump, "w") { }
-      end
       builder.with_index(reference, @dump)
     end
 
@@ -76,7 +72,7 @@ module Minimap2Example
         parser.on("--cs", "Include short cs tags") { @cs = true }
         parser.on("--MD", "Include MD tags") { @md = true }
         parser.on("--eqx", "Use =/X CIGAR operations (implies alignment)") { @eqx = true }
-        parser.on("--secondary=BOOL", "Print secondary hits: yes or no [yes]") do |value|
+        parser.on("--secondary=BOOL", "Print secondary hits: yes or no [preset default]") do |value|
           raise ArgumentError.new("--secondary must be yes or no") unless {"yes", "no"}.includes?(value)
           @secondary = value == "yes"
         end
@@ -104,10 +100,12 @@ module Minimap2Example
     private def map(aligner : Minimap2::Aligner, paths : Array(String), output : IO)
       Formatter.sam_header(output, aligner.references) if @sam
       flags = @eqx ? [Minimap2::LibMinimap2::EQX.to_u64] : nil
+      secondary = @secondary
+      secondary = (aligner.map_opt.flag & Minimap2::LibMinimap2::NO_PRINT_2ND) == 0 if secondary.nil?
       paths.each do |path|
         Fastx.each(path) do |read|
           hits = read.sequence.empty? ? [] of Minimap2::Mapping : aligner.map(read.sequence, cs: @cs, md: @md, extra_flags: flags, query_name: read.name)
-          hits.reject!(&.secondary?) unless @secondary
+          hits.reject!(&.secondary?) unless secondary
           if @sam
             if hits.empty?
               Formatter.sam(output, read, nil)

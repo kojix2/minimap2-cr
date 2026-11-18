@@ -8,6 +8,61 @@ private def cli(args : Array(String)) : Tuple(Int32, String, String)
   {status, output.to_s, error.to_s}
 end
 
+# Optional differential checks against the pinned native minimap2 executable.
+# MINIMAP2_BIN=./minimap2/minimap2 crystal spec
+if binary = ENV["MINIMAP2_BIN"]?
+  describe "native minimap2 compatibility" do
+    %w[map-ont map-hifi sr splice asm5].each do |preset|
+      [false, true].each do |sam|
+        ["--cs", "--MD"].each do |tag|
+          it "matches #{preset} #{sam ? "SAM" : "PAF"} #{tag} fields and tags" do
+            with_cli_reference do |ref, query, reference|
+              other = reference.reverse
+              File.write(ref, ">one\n#{reference}\n>two\n#{other}\n>duplicate\n#{reference}\n")
+              exact = reference[500, 1500]
+              substitution = exact.to_slice.dup
+              substitution[700] = substitution[700] == 'A'.ord ? 'C'.ord.to_u8 : 'A'.ord.to_u8
+              reads = {
+                "exact"         => exact,
+                "reverse"       => Minimap2.revcomp(other[500, 1500]),
+                "substitution"  => String.new(substitution),
+                "indels"        => exact[0, 400] + "ACGTACG" + exact[400, 600] + exact[1007..],
+                "clipped"       => "N" * 101 + other[500, 1500] + "N" * 57,
+                "split"         => reference[500, 1500] + other[3000, 1500],
+                "split_reverse" => Minimap2.revcomp(reference[500, 1500] + other[3000, 1500]),
+                "unmapped"      => "N" * 500,
+              }
+              File.open(query, "w") do |file|
+                reads.each do |name, sequence|
+                  quality = String.build { |io| sequence.bytesize.times { |i| io << (33 + i % 50).chr } }
+                  file.puts "@#{name}\n#{sequence}\n+\n#{quality}"
+                end
+              end
+              args = ["-x", preset, sam ? "-a" : "-c", tag, ref, query]
+              native = IO::Memory.new
+              native_error = IO::Memory.new
+              Process.run(binary, args, output: native, error: native_error).success?.should be_true
+              status, output, error = cli(args)
+              status.should eq(0)
+              error.should be_empty
+              # Auxiliary tags such as AS, SA, and cm are outside this example's scope.
+              normalize = ->(text : String) do
+                text.lines.reject { |line| sam && line.starts_with?('@') }.map do |line|
+                  fields = line.split('\t')
+                  size = sam ? 11 : 12
+                  tags = fields[size..].select { |field| %w[NM cs MD cg].includes?(field.split(':').first) }
+                  fields[0, size] + tags.sort
+                end
+              end
+              normalize.call(output).should eq(normalize.call(native.to_s))
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
 private def with_cli_reference(& : String, String, String ->)
   rng = Random.new(4321)
   reference = String.build { |io| 6000.times { io << "ACGT"[rng.rand(4)] } }
@@ -99,6 +154,16 @@ describe Minimap2Example::CLI do
     end
   end
 
+  it "writes valid missing SEQ and QUAL fields for empty FASTQ reads" do
+    with_cli_reference do |ref, query, _|
+      File.write(query, "@empty\n\n+\n\n")
+      status, output, error = cli(["-a", ref, query])
+      status.should eq(0)
+      error.should be_empty
+      output.lines.last.split('\t')[9, 2].should eq(["*", "*"])
+    end
+  end
+
   it "builds and reloads interoperable MMI indexes and writes to -o" do
     with_cli_reference do |ref, query, _|
       File.tempfile("minimap2-cli-index", ".mmi") do |index|
@@ -140,6 +205,41 @@ describe Minimap2Example::CLI do
       status.should eq(0)
       output.lines.reject(&.starts_with?('@')).each do |line|
         (line.split('\t')[1].to_i & 256).should eq(0)
+      end
+    end
+  end
+
+  it "honors preset secondary defaults and explicit overrides" do
+    with_cli_reference do |ref, query, reference|
+      File.write(ref, ">one\n#{reference}\n>two\n#{reference}\n")
+      status, output, _ = cli(["-x", "sr", ref, query])
+      status.should eq(0)
+      output.should_not contain("tp:A:S")
+      status, output, _ = cli(["-x", "sr", "--secondary=yes", ref, query])
+      status.should eq(0)
+      output.should contain("tp:A:S")
+    end
+  end
+
+  it "rejects multi-part mapping before writing a SAM header" do
+    with_cli_reference do |ref, query, reference|
+      File.write(ref, ">one\n#{reference}\n>two\n#{reference.reverse}\n")
+      idxopt = Minimap2::LibMinimap2::MmIdxoptT.new
+      mapopt = Minimap2::LibMinimap2::MmMapoptT.new
+      Minimap2::LibMinimap2.mm_set_opt(Pointer(LibC::Char).null, pointerof(idxopt), pointerof(mapopt))
+      idxopt.batch_size = 1000_u64
+      idxopt.mini_batch_size = 1000_i64
+      File.tempfile("minimap2-cli-multipart", ".mmi") do |index|
+        aligner = Minimap2::Aligner.new(idxopt, mapopt, 1, ref, index.path)
+        begin
+          aligner.index_parts.should eq(2)
+        ensure
+          aligner.finalize
+        end
+        status, output, error = cli(["-a", index.path, query])
+        status.should eq(1)
+        output.should be_empty
+        error.should contain("single-part indexes only")
       end
     end
   end

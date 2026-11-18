@@ -74,7 +74,20 @@ jobs:
           LD_LIBRARY_PATH: ${{ github.workspace }}/ext
         run: crystal spec
 
+      - name: Build example command (non-Windows)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p bin
+          crystal build examples/minimap2-cr.cr -o bin/minimap2-cr
+
       - name: Run specs (Windows/MSYS2)
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: crystal spec
+
+      - name: Build example command (Windows/MSYS2)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          mkdir -p bin
+          crystal build examples/minimap2-cr.cr -o bin/minimap2-cr.exe

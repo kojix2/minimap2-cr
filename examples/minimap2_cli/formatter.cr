@@ -23,7 +23,7 @@ module Minimap2Example
 
     def self.sam(output : IO, read : Read, hit : Minimap2::Mapping?)
       unless hit
-        output.puts "#{read.name}\t4\t*\t0\t0\t*\t*\t0\t0\t#{bases_or_star(read.sequence)}\t#{read.quality || "*"}"
+        output.puts "#{read.name}\t4\t*\t0\t0\t*\t*\t0\t0\t#{bases_or_star(read.sequence)}\t#{bases_or_star(read.quality || "")}"
         return
       end
 

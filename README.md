@@ -49,6 +49,7 @@ For presets and detailed options, use [AlignerBuilder](src/minimap2/builder.cr).
 ### Example command
 
 ```sh
+mkdir -p bin
 crystal build examples/minimap2-cr.cr -o bin/minimap2-cr
 bin/minimap2-cr -x map-ont reference.fa reads.fq.gz > mappings.paf
 bin/minimap2-cr -ax map-ont --MD reference.fa reads.fq > mappings.sam
@@ -74,7 +75,41 @@ native minimap2 version. SAM includes NM and optionally cs/MD tags, but no SA ta
 ```sh
 shards install
 crystal spec
+ameba src spec examples
+crystal tool format --check src spec examples
 ```
+
+If a matching native minimap2 executable is available, enable the additional
+compatibility specs (the reference clone used here is minimap2 v2.31):
+
+```sh
+MINIMAP2_BIN=./minimap2/minimap2 crystal spec
+```
+
+These compare five presets (`map-ont`, `map-hifi`, `sr`, `splice`, `asm5`) in both
+PAF and SAM, with cs and MD checked individually. They exercise exact matches,
+substitutions, insertions/deletions, reverse strands, clipping, split alignments,
+secondary hits, and unmapped reads. Comparison covers mandatory fields and the
+supported NM/cg/cs/MD tags, rather than minimap2's complete auxiliary tag set.
+
+### Verified fixes
+
+The existing API issues below were reproduced against commit `598ad08` before
+fixing them. The CLI issues were caught while checking the new example. Each has
+a regression spec that fails before the corresponding fix and passes afterward.
+
+| Area | Bug and observed evidence | Fix and verification |
+| --- | --- | --- |
+| Existing `idx_seq` helper | Creating an index terminated the process abnormally: GC-allocated pointer arrays were passed to `LibC.free`. | Use stack pointer slots. Repeatedly build, retrieve the indexed sequence, and destroy the native index. |
+| Existing index output | An unwritable output such as `reference.fa/missing.mmi` returned an aligner successfully, without creating an index file. The native reader ignores output `fopen` failures. | Check the output can be opened and propagate `File::Error`; tested with an invalid destination. |
+| Existing index output | Using the reference path as index output silently replaced the FASTA contents with a file beginning with `MMI\x02`. | Reject paths identifying the reference, including file aliases, before opening output. The spec verifies an exception and unchanged reference contents. |
+| New CLI preset handling | `-x sr` printed secondary hits despite the preset's `NO_PRINT_2ND` flag; comparison against native minimap2 exposed the extra records. | Use the preset's default unless `--secondary=yes/no` is explicit. Check both the default and explicit override, plus native comparisons. |
+| New CLI empty FASTQ output | An empty read produced an empty SAM QUAL field instead of the missing-value marker. | Emit `*` for empty sequence/quality fields; verify the exact SAM fields. The [SAM specification](https://samtools.github.io/hts-specs/SAMv1.pdf) requires QUAL to be `*` or one or more printable quality characters. |
+
+Local validation on macOS also checked SAM conversion with `samtools view`, plain
+stdin, gzip query files, `--eqx`, and MMI exchange in both directions with native
+minimap2. These checks establish the tested behaviors; they do not claim parity
+for every minimap2 feature or preset.
 
 To rebuild native code in a local checkout: `crystal run ext/build.cr`.
 License: [MIT](LICENSE).
