@@ -206,7 +206,7 @@ module Minimap2
 
           cigar = [] of Tuple(UInt32, UInt8)
           cigar_str = ""
-          nm = 0
+          nm : Int32? = nil
           md_str : String? = nil
           cs_str : String? = nil
           ds_str : String? = nil

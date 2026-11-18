@@ -30,7 +30,8 @@ module Minimap2
     getter is_primary : Bool
     getter cigar : Array(Tuple(UInt32, UInt8))
     getter cigar_str : String
-    getter nm : Int32
+    # Edit distance, or `nil` when base-level alignment was not performed.
+    getter nm : Int32?
     getter md : String?
     getter cs : String?
     getter ds : String?
@@ -49,7 +50,7 @@ module Minimap2
       @is_primary : Bool,
       @cigar : Array(Tuple(UInt32, UInt8)),
       @cigar_str : String,
-      @nm : Int32,
+      @nm : Int32?,
       @md : String?,
       @cs : String?,
       @ds : String?,

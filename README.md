@@ -36,6 +36,9 @@ hits.each { |hit| puts "#{hit.target_name}:#{hit.target_start} MAPQ=#{hit.mapq}"
 Supply your own FASTA or minimap2 index. Coordinates are zero-based and half-open.
 `cs:`, `md:` and `ds:` request alignment tags and enable CIGAR generation for
 that call. CIGAR and tags require an index containing reference sequences.
+`Mapping#nm` is the edit distance when base-level alignment is performed
+(`with_cigar`, `cigar: true`, or a tag request). Otherwise it is `nil`, rather
+than zero. Code that uses `nm` must handle this missing value.
 `aligner.seq(name, start, stop)` retrieves reference sequence, returning `nil`
 for invalid ranges, missing contigs, or indexes built with `--idx-no-seq`.
 `Minimap2.revcomp(sequence)` reverse-complements a sequence.

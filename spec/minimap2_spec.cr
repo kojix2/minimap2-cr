@@ -80,6 +80,50 @@ describe Minimap2 do
     end
   end
 
+  it "reports unavailable NM separately from an exact match" do
+    ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
+    seq = load_fasta_sequence(ref_path)
+    aligner = Minimap2::Aligner.build.map_ont.with_index(ref_path)
+
+    mappings = aligner.map(seq)
+    mappings.should_not be_empty
+    mappings.each { |mapping| mapping.nm.should be_nil }
+
+    cigar_aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(ref_path)
+    mappings = cigar_aligner.map(seq)
+    mappings.should_not be_empty
+    mappings.each { |mapping| mapping.nm.should eq(0) }
+  end
+
+  it "computes single-substitution NM only when alignment is requested" do
+    rng = Random.new(1234)
+    reference = String.build { |io| 3000.times { io << "ACGT"[rng.rand(4)] } }
+    query = reference[500, 1500].to_slice.dup
+    query[700] = query[700] == 'A'.ord ? 'C'.ord.to_u8 : 'A'.ord.to_u8
+
+    File.tempfile("minimap2-nm", ".fa") do |file|
+      file.puts ">ref\n#{reference}"
+      file.flush
+      aligner = Minimap2::Aligner.build.map_ont.with_index(file.path)
+      hit = aligner.map(query).max_by(&.mapq)
+      hit.nm.should be_nil
+      hit.cigar.should be_empty
+
+      cigar_aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(file.path)
+      hit = cigar_aligner.map(query).max_by(&.mapq)
+      hit.nm.should eq(1)
+      hit.cigar_str.should eq("1500M")
+
+      {% for tag in %w(cs md ds) %}
+        hit = aligner.map(query, {{tag.id}}: true).max_by(&.mapq)
+        hit.nm.should eq(1)
+        hit.{{tag.id}}.should_not be_nil
+      {% end %}
+
+      aligner.map(query).max_by(&.mapq).nm.should be_nil
+    end
+  end
+
   it "fetches reference sequences without requiring CIGAR generation" do
     ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
     aligner = Minimap2::Aligner.build.map_ont.with_index(ref_path)
