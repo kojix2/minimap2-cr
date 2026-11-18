@@ -152,7 +152,8 @@ For presets and detailed options, use <a href="src/minimap2/builder.cr">AlignerB
     <use href="#octicon-link"/>
   </svg>
 </a>Example command</h3>
-<pre><code class="language-sh">crystal build examples/minimap2-cr.cr -o bin/minimap2-cr
+<pre><code class="language-sh">mkdir -p bin
+crystal build examples/minimap2-cr.cr -o bin/minimap2-cr
 bin/minimap2-cr -x map-ont reference.fa reads.fq.gz &gt; mappings.paf
 bin/minimap2-cr -ax map-ont --MD reference.fa reads.fq &gt; mappings.sam
 bin/minimap2-cr -d reference.mmi reference.fa
@@ -174,7 +175,36 @@ native minimap2 version. SAM includes NM and optionally cs/MD tags, but no SA ta
   </svg>
 </a>Checks</h3>
 <pre><code class="language-sh">shards install
-crystal spec</code></pre>
+crystal spec
+ameba src spec examples
+crystal tool format --check src spec examples</code></pre>
+<p>If a matching native minimap2 executable is available, enable the additional
+compatibility specs (the reference clone used here is minimap2 v2.31):</p>
+<pre><code class="language-sh">MINIMAP2_BIN=./minimap2/minimap2 crystal spec</code></pre>
+<p>These compare five presets (<code>map-ont</code>, <code>map-hifi</code>, <code>sr</code>, <code>splice</code>, <code>asm5</code>) in both
+PAF and SAM, with cs and MD checked individually. They exercise exact matches,
+substitutions, insertions/deletions, reverse strands, clipping, split alignments,
+secondary hits, and unmapped reads. Comparison covers mandatory fields and the
+supported NM/cg/cs/MD tags, rather than minimap2's complete auxiliary tag set.</p>
+<h3><a id="verified-fixes" class="anchor" href="#verified-fixes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Verified fixes</h3>
+<p>The existing API issues below were reproduced against commit <code>598ad08</code> before
+fixing them. The CLI issues were caught while checking the new example. Each has
+a regression spec that fails before the corresponding fix and passes afterward.</p>
+<p>| Area | Bug and observed evidence | Fix and verification |
+| --- | --- | --- |
+| Existing <code>idx_seq</code> helper | Creating an index terminated the process abnormally: GC-allocated pointer arrays were passed to <code>LibC.free</code>. | Use stack pointer slots. Repeatedly build, retrieve the indexed sequence, and destroy the native index. |
+| Existing index output | An unwritable output such as <code>reference.fa/missing.mmi</code> returned an aligner successfully, without creating an index file. The native reader ignores output <code>fopen</code> failures. | Check the output can be opened and propagate <code>File::Error</code>; tested with an invalid destination. |
+| Existing index output | Using the reference path as index output silently replaced the FASTA contents with a file beginning with <code>MMI\x02</code>. | Reject paths identifying the reference, including file aliases, before opening output. The spec verifies an exception and unchanged reference contents. |
+| New CLI preset handling | <code>-x sr</code> printed secondary hits despite the preset's <code>NO_PRINT_2ND</code> flag; comparison against native minimap2 exposed the extra records. | Use the preset's default unless <code>--secondary=yes/no</code> is explicit. Check both the default and explicit override, plus native comparisons. |
+| New CLI empty FASTQ output | An empty read produced an empty SAM QUAL field instead of the missing-value marker. | Emit <code>*</code> for empty sequence/quality fields; verify the exact SAM fields. The <a href="https://samtools.github.io/hts-specs/SAMv1.pdf">SAM specification</a> requires QUAL to be <code>*</code> or one or more printable quality characters. |</p>
+<p>Local validation on macOS also checked SAM conversion with <code>samtools view</code>, plain
+stdin, gzip query files, <code>--eqx</code>, and MMI exchange in both directions with native
+minimap2. These checks establish the tested behaviors; they do not claim parity
+for every minimap2 feature or preset.</p>
 <p>To rebuild native code in a local checkout: <code>crystal run ext/build.cr</code>.
 License: <a href="LICENSE">MIT</a>.</p>
 </div>
