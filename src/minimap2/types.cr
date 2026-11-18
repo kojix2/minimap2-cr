@@ -36,6 +36,11 @@ module Minimap2
     getter md : String?
     getter cs : String?
     getter ds : String?
+    getter? secondary : Bool
+
+    def supplementary? : Bool
+      !is_primary && !secondary?
+    end
 
     def initialize(
       @query_start : Int32,
@@ -55,6 +60,7 @@ module Minimap2
       @md : String?,
       @cs : String?,
       @ds : String?,
+      @secondary : Bool = false,
     )
     end
   end

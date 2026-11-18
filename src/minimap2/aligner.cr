@@ -65,6 +65,21 @@ module Minimap2
       @idx_parts[0].value.n_seq
     end
 
+    # Number of loaded index parts. Mapping results are combined per part.
+    def index_parts : Int32
+      @idx_parts.size
+    end
+
+    # Reference names and lengths, in index order (for SAM sequence headers).
+    def references : Array(Tuple(String, Int32))
+      @idx_parts.flat_map do |idx|
+        Array.new(idx.value.n_seq.to_i) do |i|
+          entry = idx.value.seq[i]
+          {String.new(entry.name), entry.len.to_i}
+        end
+      end
+    end
+
     # Fetch a reference subsequence by contig name.
     #
     # Coordinates are 0-based, half-open (`start...stop`). Returns `nil` for
@@ -252,7 +267,8 @@ module Minimap2
             nm,
             md_str,
             cs_str,
-            ds_str
+            ds_str,
+            reg.parent != reg.id
           )
         end
       ensure

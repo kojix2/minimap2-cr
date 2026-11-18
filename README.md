@@ -46,6 +46,31 @@ For presets and detailed options, use [AlignerBuilder](src/minimap2/builder.cr).
 
 ## Development
 
+### Example command
+
+```sh
+crystal build examples/minimap2-cr.cr -o bin/minimap2-cr
+bin/minimap2-cr -x map-ont reference.fa reads.fq.gz > mappings.paf
+bin/minimap2-cr -ax map-ont --MD reference.fa reads.fq > mappings.sam
+bin/minimap2-cr -d reference.mmi reference.fa
+bin/minimap2-cr -c --cs reference.mmi reads.fa -o mappings.paf
+cat reads.fq | bin/minimap2-cr -a reference.mmi -
+```
+
+This small example uses the Crystal API. It accepts multiline FASTA/FASTQ,
+gzip-compressed query files (detected by their contents), multiple query files,
+and plain FASTA/FASTQ on standard input. Reference input is handled by minimap2.
+PAF omits unmapped reads; SAM includes them. `--secondary=no` suppresses secondary
+hits while retaining supplementary alignments. Use `--help` for supported options.
+
+Reads are mapped independently and serially; `-t` controls index construction
+only. Paired-end mapping, mapping against multi-part indexes, long cs tags, and
+the complete set of minimap2 options and auxiliary SAM/PAF tags are not included.
+All index parts are held in memory. MMI files are compatible with the pinned
+native minimap2 version. SAM includes NM and optionally cs/MD tags, but no SA tag.
+
+### Checks
+
 ```sh
 shards install
 crystal spec
