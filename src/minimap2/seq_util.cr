@@ -1,4 +1,14 @@
 module Minimap2
+  # :nodoc:
+  COMPLEMENT_TABLE = begin
+    bases = "ACGTURYSWKMBDHVNacgturyswkmbdhvn"
+    complements = "TGCAAYRSWMKVHDBNtgcaayrswmkvhdbn"
+    StaticArray(Char, 256).new do |byte|
+      index = bases.index(byte.chr)
+      index ? complements[index] : 'N'
+    end
+  end
+
   # Utilities adapted from minimap2 mappy helpers.
   #
   # Returns the reverse-complement of a DNA/RNA sequence string.
@@ -78,40 +88,6 @@ module Minimap2
   end
 
   private def self.complement(byte : UInt8) : Char
-    case byte
-    when 'A'.ord then 'T'
-    when 'C'.ord then 'G'
-    when 'G'.ord then 'C'
-    when 'T'.ord then 'A'
-    when 'U'.ord then 'A'
-    when 'R'.ord then 'Y'
-    when 'Y'.ord then 'R'
-    when 'S'.ord then 'S'
-    when 'W'.ord then 'W'
-    when 'K'.ord then 'M'
-    when 'M'.ord then 'K'
-    when 'B'.ord then 'V'
-    when 'D'.ord then 'H'
-    when 'H'.ord then 'D'
-    when 'V'.ord then 'B'
-    when 'N'.ord then 'N'
-    when 'a'.ord then 't'
-    when 'c'.ord then 'g'
-    when 'g'.ord then 'c'
-    when 't'.ord then 'a'
-    when 'u'.ord then 'a'
-    when 'r'.ord then 'y'
-    when 'y'.ord then 'r'
-    when 's'.ord then 's'
-    when 'w'.ord then 'w'
-    when 'k'.ord then 'm'
-    when 'm'.ord then 'k'
-    when 'b'.ord then 'v'
-    when 'd'.ord then 'h'
-    when 'h'.ord then 'd'
-    when 'v'.ord then 'b'
-    when 'n'.ord then 'n'
-    else              'N'
-    end
+    COMPLEMENT_TABLE[byte]
   end
 end

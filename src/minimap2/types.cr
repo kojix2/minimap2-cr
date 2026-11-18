@@ -27,7 +27,8 @@ module Minimap2
     getter match_len : Int32
     getter block_len : Int32
     getter mapq : UInt32
-    getter is_primary : Bool
+    # Preserve the existing public accessor name for compatibility.
+    getter is_primary : Bool # ameba:disable Naming/QueryBoolMethods
     getter cigar : Array(Tuple(UInt32, UInt8))
     getter cigar_str : String
     # Edit distance, or `nil` when base-level alignment was not performed.

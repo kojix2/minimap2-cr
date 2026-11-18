@@ -15,6 +15,17 @@ def load_fasta_sequence(path : String, max_len : Int32 = 200) : String
 end
 
 describe Minimap2 do
+  it "reverse-complements DNA, RNA and IUPAC ambiguity codes with case preserved" do
+    Minimap2.revcomp("ACGTURYSWKMBDHVN").should eq("NBDHVKMWSRYAACGT")
+    Minimap2.revcomp("acgturyswkmbdhvn").should eq("nbdhvkmwsryaacgt")
+    Minimap2.revcomp("AUGC").should eq("GCAT")
+  end
+
+  it "handles empty sequences and unknown bytes in reverse complements" do
+    Minimap2.revcomp("").should eq("")
+    Minimap2.revcomp(Bytes[0_u8, 255_u8, 'A'.ord.to_u8]).should eq("TNN")
+  end
+
   it "initializes options" do
     idxopt = Minimap2::LibMinimap2::MmIdxoptT.new
     mapopt = Minimap2::LibMinimap2::MmMapoptT.new
@@ -87,12 +98,12 @@ describe Minimap2 do
 
     mappings = aligner.map(seq)
     mappings.should_not be_empty
-    mappings.each { |mapping| mapping.nm.should be_nil }
+    mappings.each(&.nm.should(be_nil))
 
     cigar_aligner = Minimap2::Aligner.build.map_ont.with_cigar.with_index(ref_path)
     mappings = cigar_aligner.map(seq)
     mappings.should_not be_empty
-    mappings.each { |mapping| mapping.nm.should eq(0) }
+    mappings.each(&.nm.should(eq(0)))
   end
 
   it "computes single-substitution NM only when alignment is requested" do
@@ -114,10 +125,10 @@ describe Minimap2 do
       hit.nm.should eq(1)
       hit.cigar_str.should eq("1500M")
 
-      {% for tag in %w(cs md ds) %}
-        hit = aligner.map(query, {{tag.id}}: true).max_by(&.mapq)
+      {% for tag in %w[cs md ds] %}
+        hit = aligner.map(query, {{ tag.id }}: true).max_by(&.mapq)
         hit.nm.should eq(1)
-        hit.{{tag.id}}.should_not be_nil
+        hit.{{ tag.id }}.should_not be_nil
       {% end %}
 
       aligner.map(query).max_by(&.mapq).nm.should be_nil
@@ -206,18 +217,18 @@ describe Minimap2 do
     end
   end
 
-  {% for tag in %w(cs md ds) %}
-    it "generates {{tag.id}} without with_cigar and keeps default mapping options" do
+  {% for tag in %w[cs md ds] %}
+    it "generates {{ tag.id }} without with_cigar and keeps default mapping options" do
       ref_path = File.expand_path("./fixtures/test_data.fasta", __DIR__)
       aligner = Minimap2::Aligner.build.map_ont.with_index(ref_path)
       seq = load_fasta_sequence(ref_path)
 
-      mappings = aligner.map(seq, {{tag.id}}: true)
+      mappings = aligner.map(seq, {{ tag.id }}: true)
       mappings.should_not be_empty
       mappings.each do |mapping|
         length = mapping.query_end - mapping.query_start
         length.should be > 0
-        mapping.{{tag.id}}.should eq({{tag == "md" ? "" : ":"}} + length.to_s)
+        mapping.{{ tag.id }}.should eq({{ tag == "md" ? "" : ":" }} + length.to_s)
         mapping.cigar_str.should eq("#{length}M")
       end
       aligner.map(seq).first.cigar.should be_empty
@@ -236,7 +247,7 @@ describe Minimap2 do
 
     mappings = aligner.map(bytes, cs: true, md: true, ds: true)
     mappings.should_not be_empty
-    mappings.map(&.strand).uniq.size.should eq(2)
+    mappings.map(&.strand).uniq!.size.should eq(2)
     mappings.each do |mapping|
       length = mapping.query_end - mapping.query_start
       length.should be > 0

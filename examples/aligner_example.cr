@@ -12,4 +12,6 @@ subseq = aligner.seq("MT_human", 100, 200)
 hits = aligner.map(subseq, cs: true, md: true) if subseq
 
 # show result
-pp hits
+hits.try &.each do |hit|
+  puts "#{hit.target_name}:#{hit.target_start}-#{hit.target_end} #{hit.strand} MAPQ=#{hit.mapq} CIGAR=#{hit.cigar_str}"
+end
