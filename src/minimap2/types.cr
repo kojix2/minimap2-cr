@@ -37,6 +37,8 @@ module Minimap2
     getter cs : String?
     getter ds : String?
     getter? secondary : Bool
+    # Whether minimap2 marked this as an inversion alignment.
+    getter? inversion : Bool
 
     def supplementary? : Bool
       !is_primary && !secondary?
@@ -61,6 +63,7 @@ module Minimap2
       @cs : String?,
       @ds : String?,
       @secondary : Bool = false,
+      @inversion : Bool = false,
     )
     end
   end

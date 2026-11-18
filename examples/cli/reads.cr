@@ -47,13 +47,13 @@ module Minimap2
         if header.starts_with?('>')
           ::Fastx::Fasta::Reader.open(source) do |reader|
             reader.each do |name, sequence|
-              yield Read.new(read_name(name), sequence)
+              yield Read.new(read_name(name), sequence.tr("Uu", "Tt"))
             end
           end
         elsif header.starts_with?('@')
           ::Fastx::Fastq::Reader.open(source) do |reader|
             reader.each do |name, sequence, quality|
-              yield Read.new(read_name(name), sequence, quality)
+              yield Read.new(read_name(name), sequence.tr("Uu", "Tt"), quality)
             end
           end
         else

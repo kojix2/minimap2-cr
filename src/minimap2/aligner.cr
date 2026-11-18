@@ -215,6 +215,9 @@ module Minimap2
 
       begin
         regs = reg_ptr.as(Pointer(LibMinimap2::MmReg1T))
+        # mm_map can leave sam_pri unset without CIGAR. Match the native
+        # mm_set_sam_pri rule: the first non-secondary record is representative.
+        primary_index = (0...n_regs).find { |i| regs[i].parent == regs[i].id }
         0.upto(n_regs - 1) do |i|
           reg = regs[i]
           next if reg.rid < 0
@@ -226,8 +229,8 @@ module Minimap2
           flags = reg.flags
           mapq = (flags & 0xff_u32)
           rev = ((flags >> 10) & 0x1_u32) == 1_u32
-          sam_pri = ((flags >> 12) & 0x1_u32) == 1_u32
-          is_primary = reg.parent == reg.id && sam_pri
+          inversion = ((flags >> 11) & 0x1_u32) == 1_u32
+          is_primary = i == primary_index
 
           strand = rev ? Strand::Reverse : Strand::Forward
 
@@ -278,7 +281,8 @@ module Minimap2
             md_str,
             cs_str,
             ds_str,
-            reg.parent != reg.id
+            reg.parent != reg.id,
+            inversion
           )
         end
       ensure

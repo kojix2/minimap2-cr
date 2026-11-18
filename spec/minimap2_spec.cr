@@ -15,6 +15,27 @@ def load_fasta_sequence(path : String, max_len : Int32 = 200) : String
 end
 
 describe Minimap2 do
+  it "identifies a primary mapping without base-level alignment" do
+    rng = Random.new(918)
+    reference = String.build { |io| 3000.times { io << "ACGT"[rng.rand(4)] } }
+    File.tempfile("minimap2-primary", ".fa") do |file|
+      file.puts ">ref\n#{reference}"
+      file.flush
+      [false, true].each do |cigar|
+        aligner = Minimap2::Aligner.new(file.path, cigar: cigar)
+        begin
+          hits = aligner.map(reference[500, 1500])
+          hits.size.should eq(1)
+          hits.first.is_primary.should be_true
+          hits.first.secondary?.should be_false
+          hits.first.supplementary?.should be_false
+        ensure
+          aligner.finalize
+        end
+      end
+    end
+  end
+
   it "builds and destroys in-memory indexes without freeing GC memory" do
     3.times do
       idx = Minimap2.idx_seq("ACGT" * 100, 10, 15)

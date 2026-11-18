@@ -78,7 +78,7 @@ module Minimap2
         end
         parser.on("-t INT", "Index construction threads; queries are mapped serially [1]") { |value| @threads = value.to_i }
         parser.on("-d FILE", "Save index; omit queries to build only") { |value| @dump = value }
-        parser.on("-o FILE", "Write mappings to FILE [stdout]") { |value| @output = value }
+        parser.on("-o FILE", "Write mappings to FILE ('-' for stdout) [stdout]") { |value| @output = value == "-" ? nil : value }
         parser.on("-h", "--help", "Show help") { @help = true }
         parser.on("--version", "Show minimap2-cr version") { @version = true }
       end

@@ -78,6 +78,14 @@ private def with_cli_reference(& : String, String, String ->)
 end
 
 describe Minimap2::CLI::Reads do
+  it "normalizes RNA bases like minimap2 for FASTA and FASTQ" do
+    [">rna\nAuUGc\n", "@rna\nAuUGc\n+\n!!!!!\n"].each do |text|
+      reads = [] of Minimap2::CLI::Read
+      Minimap2::CLI::Reads.each_io(IO::Memory.new(text)) { |read| reads << read }
+      reads.first.sequence.should eq("AtTGc")
+    end
+  end
+
   it "reads multiline FASTA with comments and CRLF" do
     reads = [] of Minimap2::CLI::Read
     input = IO::Memory.new("\n>one comment\r\nAC\r\nGT\r\n>two comment\r\nTGCA\r\n")
@@ -139,6 +147,26 @@ describe Minimap2::CLI::Reads do
 end
 
 describe Minimap2::CLI do
+  it "accepts -o - as standard output" do
+    with_cli_reference do |ref, query, _|
+      status, output, error = cli(["-c", "-o", "-", ref, query])
+      status.should eq(0)
+      error.should be_empty
+      output.should eq(cli(["-c", ref, query])[1])
+    end
+  end
+
+  it "preserves inversion alignment types in PAF" do
+    with_cli_reference do |ref, query, reference|
+      sequence = reference[500, 1500] + Minimap2.revcomp(reference[2000, 500]) + reference[2500, 1500]
+      File.write(query, ">inversion\n#{sequence}\n")
+      status, output, error = cli(["-c", ref, query])
+      status.should eq(0)
+      error.should be_empty
+      output.should contain("tp:A:I")
+    end
+  end
+
   it "shows help/version and reports invalid options or missing arguments" do
     cli(["--help"])[1].should contain("Usage: minimap2-cr")
     cli(["--version"])[1].strip.should eq(Minimap2::VERSION)

@@ -10,7 +10,12 @@ module Minimap2
         output << '\t' << strand << '\t' << hit.target_name << '\t' << hit.target_len
         output << '\t' << hit.target_start << '\t' << hit.target_end
         output << '\t' << hit.match_len << '\t' << hit.block_len << '\t' << hit.mapq
-        output << "\ttp:A:" << (hit.secondary? ? 'S' : 'P')
+        type = if hit.inversion?
+                 hit.secondary? ? 'i' : 'I'
+               else
+                 hit.secondary? ? 'S' : 'P'
+               end
+        output << "\ttp:A:" << type
         output << "\tcg:Z:" << hit.cigar_str if cigar
         tags(output, hit)
         output << '\n'
