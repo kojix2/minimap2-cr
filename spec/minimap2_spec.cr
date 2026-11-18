@@ -15,6 +15,20 @@ def load_fasta_sequence(path : String, max_len : Int32 = 200) : String
 end
 
 describe Minimap2 do
+  it "builds and destroys in-memory indexes without freeing GC memory" do
+    3.times do
+      idx = Minimap2.idx_seq("ACGT" * 100, 10, 15)
+      idx.null?.should be_false
+      begin
+        Minimap2::LibMinimap2.mm_idx_index_name(idx)
+        idx.value.n_seq.should eq(1)
+        Minimap2.fetch_seq(idx, "N/A").should eq("ACGT" * 100)
+      ensure
+        Minimap2::LibMinimap2.mm_idx_destroy(idx)
+      end
+    end
+  end
+
   it "reverse-complements DNA, RNA and IUPAC ambiguity codes with case preserved" do
     Minimap2.revcomp("ACGTURYSWKMBDHVN").should eq("NBDHVKMWSRYAACGT")
     Minimap2.revcomp("acgturyswkmbdhvn").should eq("nbdhvkmwsryaacgt")

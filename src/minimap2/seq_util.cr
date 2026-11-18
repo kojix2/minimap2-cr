@@ -59,23 +59,11 @@ module Minimap2
   #
   # Useful for tests and small ad-hoc alignment tasks.
   def self.idx_seq(seq : String, w : Int32, k : Int32, is_hpc : Bool = false, bucket_bits : Int32 = 14) : Pointer(LibMinimap2::MmIdxT)
-    bytes = seq.to_slice
-    buf = Bytes.new(bytes.size + 1)
-    buf.copy_from(bytes)
-    buf[bytes.size] = 0_u8
-
-    seq_ptrs = Pointer(LibC::Char*).malloc(1)
-    name_ptrs = Pointer(LibC::Char*).malloc(1)
-
-    begin
-      seq_ptrs[0] = buf.to_unsafe.as(LibC::Char*)
-      fake_name = "N/A"
-      name_ptrs[0] = fake_name.to_unsafe
-      LibMinimap2.mm_idx_str(w, k, is_hpc ? 1 : 0, bucket_bits, 1, seq_ptrs, name_ptrs)
-    ensure
-      LibC.free(seq_ptrs.as(Void*))
-      LibC.free(name_ptrs.as(Void*))
-    end
+    # mm_idx_str copies the strings. Keep the pointer slots on the stack;
+    # Pointer.malloc uses Crystal's GC and must never be passed to LibC.free.
+    sequence = seq.to_unsafe
+    name = "N/A".to_unsafe
+    LibMinimap2.mm_idx_str(w, k, is_hpc ? 1 : 0, bucket_bits, 1, pointerof(sequence), pointerof(name))
   end
 
   private def self.decode_seq(buf : Bytes, len : Int32) : String
