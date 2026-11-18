@@ -138,7 +138,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L19" target="_blank">
+      <a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L19" target="_blank">
         minimap2/types.cr
       </a>
     
@@ -161,7 +161,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28query_start%3AInt32%2Cquery_end%3AInt32%2Cstrand%3AStrand%2Ctarget_name%3AString%2Ctarget_len%3AInt32%2Ctarget_start%3AInt32%2Ctarget_end%3AInt32%2Cmatch_len%3AInt32%2Cblock_len%3AInt32%2Cmapq%3AUInt32%2Cis_primary%3ABool%2Ccigar%3AArray%28Tuple%28UInt32%2CUInt8%29%29%2Ccigar_str%3AString%2Cnm%3AInt32%7CNil%2Cmd%3AString%7CNil%2Ccs%3AString%7CNil%2Cds%3AString%7CNil%2Csecondary%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(query_start : Int32, query_end : Int32, strand : Strand, target_name : String, target_len : Int32, target_start : Int32, target_end : Int32, match_len : Int32, block_len : Int32, mapq : UInt32, is_primary : Bool, cigar : Array(Tuple(UInt32, UInt8)), cigar_str : String, nm : Int32 | Nil, md : String | Nil, cs : String | Nil, ds : String | Nil, secondary : Bool = <span class="n">false</span>)</a>
+        <a href="#new%28query_start%3AInt32%2Cquery_end%3AInt32%2Cstrand%3AStrand%2Ctarget_name%3AString%2Ctarget_len%3AInt32%2Ctarget_start%3AInt32%2Ctarget_end%3AInt32%2Cmatch_len%3AInt32%2Cblock_len%3AInt32%2Cmapq%3AUInt32%2Cis_primary%3ABool%2Ccigar%3AArray%28Tuple%28UInt32%2CUInt8%29%29%2Ccigar_str%3AString%2Cnm%3AInt32%7CNil%2Cmd%3AString%7CNil%2Ccs%3AString%7CNil%2Cds%3AString%7CNil%2Csecondary%3ABool%3Dfalse%2Cinversion%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(query_start : Int32, query_end : Int32, strand : Strand, target_name : String, target_len : Int32, target_start : Int32, target_end : Int32, match_len : Int32, block_len : Int32, mapq : UInt32, is_primary : Bool, cigar : Array(Tuple(UInt32, UInt8)), cigar_str : String, nm : Int32 | Nil, md : String | Nil, cs : String | Nil, ds : String | Nil, secondary : Bool = <span class="n">false</span>, inversion : Bool = <span class="n">false</span>)</a>
         
       </li>
     
@@ -205,6 +205,13 @@
     
       <li class="entry-summary">
         <a href="#ds%3AString%7CNil-instance-method" class="signature"><strong>#ds</strong> : String | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#inversion%3F%3ABool-instance-method" class="signature"><strong>#inversion?</strong> : Bool</a>
+        
+          <div class="summary"><p>Whether minimap2 marked this as an inversion alignment.</p></div>
         
       </li>
     
@@ -339,18 +346,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(query_start:Int32,query_end:Int32,strand:Strand,target_name:String,target_len:Int32,target_start:Int32,target_end:Int32,match_len:Int32,block_len:Int32,mapq:UInt32,is_primary:Bool,cigar:Array(Tuple(UInt32,UInt8)),cigar_str:String,nm:Int32|Nil,md:String|Nil,cs:String|Nil,ds:String|Nil,secondary:Bool=false)-class-method">
+    <div class="entry-detail" id="new(query_start:Int32,query_end:Int32,strand:Strand,target_name:String,target_len:Int32,target_start:Int32,target_end:Int32,match_len:Int32,block_len:Int32,mapq:UInt32,is_primary:Bool,cigar:Array(Tuple(UInt32,UInt8)),cigar_str:String,nm:Int32|Nil,md:String|Nil,cs:String|Nil,ds:String|Nil,secondary:Bool=false,inversion:Bool=false)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(query_start : Int32, query_end : Int32, strand : <a href="../Minimap2/Strand.html">Strand</a>, target_name : String, target_len : Int32, target_start : Int32, target_end : Int32, match_len : Int32, block_len : Int32, mapq : UInt32, is_primary : Bool, cigar : Array(Tuple(UInt32, UInt8)), cigar_str : String, nm : Int32 | Nil, md : String | Nil, cs : String | Nil, ds : String | Nil, secondary : Bool = <span class="n">false</span>)
+        def self.<strong>new</strong>(query_start : Int32, query_end : Int32, strand : <a href="../Minimap2/Strand.html">Strand</a>, target_name : String, target_len : Int32, target_start : Int32, target_end : Int32, match_len : Int32, block_len : Int32, mapq : UInt32, is_primary : Bool, cigar : Array(Tuple(UInt32, UInt8)), cigar_str : String, nm : Int32 | Nil, md : String | Nil, cs : String | Nil, ds : String | Nil, secondary : Bool = <span class="n">false</span>, inversion : Bool = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#new%28query_start%3AInt32%2Cquery_end%3AInt32%2Cstrand%3AStrand%2Ctarget_name%3AString%2Ctarget_len%3AInt32%2Ctarget_start%3AInt32%2Ctarget_end%3AInt32%2Cmatch_len%3AInt32%2Cblock_len%3AInt32%2Cmapq%3AUInt32%2Cis_primary%3ABool%2Ccigar%3AArray%28Tuple%28UInt32%2CUInt8%29%29%2Ccigar_str%3AString%2Cnm%3AInt32%7CNil%2Cmd%3AString%7CNil%2Ccs%3AString%7CNil%2Cds%3AString%7CNil%2Csecondary%3ABool%3Dfalse%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28query_start%3AInt32%2Cquery_end%3AInt32%2Cstrand%3AStrand%2Ctarget_name%3AString%2Ctarget_len%3AInt32%2Ctarget_start%3AInt32%2Ctarget_end%3AInt32%2Cmatch_len%3AInt32%2Cblock_len%3AInt32%2Cmapq%3AUInt32%2Cis_primary%3ABool%2Ccigar%3AArray%28Tuple%28UInt32%2CUInt8%29%29%2Ccigar_str%3AString%2Cnm%3AInt32%7CNil%2Cmd%3AString%7CNil%2Ccs%3AString%7CNil%2Cds%3AString%7CNil%2Csecondary%3ABool%3Dfalse%2Cinversion%3ABool%3Dfalse%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -382,7 +389,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -398,7 +405,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L32" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -414,7 +421,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -430,7 +437,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -446,7 +453,28 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L38" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="inversion?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>inversion?</strong> : Bool
+
+        <a class="method-permalink" href="#inversion%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Whether minimap2 marked this as an inversion alignment.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L41" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -467,7 +495,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -483,7 +511,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L29" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -499,7 +527,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -515,7 +543,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -536,7 +564,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -552,7 +580,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -568,7 +596,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -584,7 +612,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -600,7 +628,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -616,7 +644,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -632,7 +660,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -648,7 +676,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -664,7 +692,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -680,7 +708,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/minimap2-cr/blob/380ee40898a75aec4759915c5487430020065407/src/minimap2/types.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/minimap2-cr/blob/2d2ad26af3d3776addaf301fcabd6af328b661f0/src/minimap2/types.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
